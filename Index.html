@@ -1,18 +1,19 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>Random URL Generator</title>
-</head>
-<body>
-	<button onclick="generateRandomURL()">Generate Random URL</button>
-	<script type="text/javascript">
-		function generateRandomURL() {
-			var min = 1;
-			var max = 178;
-			var randomNum = Math.floor(Math.random() * (max - min + 1)) + min;
-			var randomURL = "https://ganjoor.net/khayyam/robaee/sh" + randomNum;
-			window.location.href = randomURL;
-		}
-	</script>
-</body>
+  <head>
+    <title>Random URL</title>
+    <script>
+      function redirectToRandomURL() {
+        var min = 1;
+        var max = 178;
+        var randomIndex = Math.floor(Math.random() * (max - min + 1)) + min;
+        var randomURL = "https://ganjoor.net/khayyam/robaee/sh" + randomIndex;
+        window.location.href = randomURL;
+      }
+      redirectToRandomURL();
+    </script>
+  </head>
+  <body>
+    <p>Redirecting to a random URL...</p>
+  </body>
 </html>
