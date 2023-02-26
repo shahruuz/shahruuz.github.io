@@ -4,10 +4,10 @@
     <title>Random URL</title>
     <script>
       function redirectToRandomURL() {
-        var min = 1;
-        var max = 178;
+        var min = 50256;
+        var max = 50398;
         var randomIndex = Math.floor(Math.random() * (max - min + 1)) + min;
-        var randomURL = "https://ganjoor.net/khayyam/robaee/sh" + randomIndex;
+        var randomURL = "https://ganjoor.net/t6e?p=" + randomIndex;
         window.location.href = randomURL;
       }
       redirectToRandomURL();
