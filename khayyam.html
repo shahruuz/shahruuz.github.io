@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Random URL</title>
+    <script>
+      function redirectToRandomURL() {
+        var min = 50256;
+        var max = 50398;
+        const numbers = Array.from({length: max - min + 1}, (_, i) => i + min);
+        for (let i = numbers.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [numbers[i], numbers[j]] = [numbers[j], numbers[i]];
+        }
+        var randomURL = "https://ganjoor.net/t6e?p=" + numbers;
+        window.location.href = randomURL;
+      }
+      redirectToRandomURL();
+    </script>
+  </head>
+  <body>
+    <p>Redirecting to a random URL...</p>
+  </body>
+</html>
