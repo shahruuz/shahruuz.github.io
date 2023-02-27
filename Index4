@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Random URL</title>
+    <script>
+      var urls = [];
+      for (var i = 50256; i <= 50398; i++) {
+        urls.push("https://ganjoor.net/t6e?p=" + i);
+      }
+      var lastIndex = parseInt(localStorage.getItem("lastIndex")) || -1;
+      var nextIndex = lastIndex + 1 >= urls.length ? 0 : lastIndex + 1;
+      var nextURL = urls[nextIndex];
+      localStorage.setItem("lastIndex", nextIndex);
+      window.location.href = nextURL;
+    </script>
+  </head>
+  <body>
+    <p>Redirecting to the next URL...</p>
+  </body>
+</html>
