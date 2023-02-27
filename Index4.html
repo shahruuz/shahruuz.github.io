@@ -7,17 +7,14 @@
       for (var i = 50256; i <= 50398; i++) {
         urls.push("https://ganjoor.net/t6e?p=" + i);
       }
-      var lastIndex = parseInt(localStorage.getItem("lastIndex")) || -1;
+      var lastIndex = parseInt(console.getItem("lastIndex")) || -1;
       var nextIndex = lastIndex + 1 >= urls.length ? 0 : lastIndex + 1;
       var nextURL = urls[nextIndex];
-      localStorage.setItem("lastIndex", nextIndex);
-      function redirectToNextURL() {
-        window.location.href = nextURL;
-      }
-      setTimeout(redirectToNextURL, 5000); // wait 5 seconds before redirecting
+      console.setItem("lastIndex", nextIndex);
+      window.location.href = nextURL;
     </script>
   </head>
   <body>
-    <p>Redirecting to the next URL in 5 seconds...</p>
+    <p>Loading the next URL...</p>
   </body>
 </html>
