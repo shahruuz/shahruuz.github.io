@@ -11,10 +11,13 @@
       var nextIndex = lastIndex + 1 >= urls.length ? 0 : lastIndex + 1;
       var nextURL = urls[nextIndex];
       localStorage.setItem("lastIndex", nextIndex);
-      window.location.href = nextURL;
+      function redirectToNextURL() {
+        window.location.href = nextURL;
+      }
+      setTimeout(redirectToNextURL, 5000); // wait 5 seconds before redirecting
     </script>
   </head>
   <body>
-    <p>Redirecting to the next URL...</p>
+    <p>Redirecting to the next URL in 5 seconds...</p>
   </body>
 </html>
