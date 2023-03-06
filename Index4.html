@@ -14,7 +14,7 @@
         randomNumber = Math.floor(Math.random() * (50398-50256)) + 50256;
       } while (visitedNumbers.includes(randomNumber));
       visitedNumbers.push(randomNumber);
-      if (visitedNumbers.length === 7) {
+      if (visitedNumbers.length === (50398-50256)) {
         visitedNumbers = [];
       }
       localStorage.setItem('visitedNumbers', JSON.stringify(visitedNumbers));
