@@ -1,27 +1,22 @@
-# FieldKit v1.9.2 validation
+# FieldKit v1.10.0 theme verification
+
+## Scope
+Presentation-only theme upgrade from v1.9.2 (f65f79556660a3a82dbebefa7950e5044055ffd5).
+The inventory application script is byte-identical to the prior release. Storage keys, one-time reset marker, quantities, item order, photos, notes and packing behavior are untouched.
 
 ## Before deployment
-- `node fieldkit/tests/verify.cjs`: 38 behavior checks pass.
-- Covered: retained legacy data/photos, quantities, Empty, Archive/restore/delete, confirmation cancel, quick add/edit, search/filters, state moves, pointer drop/cancel, Undo, save/reload, one-time reset guard, JSON round-trip, weights, kit names, refill filter, strict import, duplicate rejection, empty inventory imports, recovery snapshots, malformed data preservation, storage quota failure and spreadsheet formula neutralization.
-- JavaScript syntax checks pass for the app, service worker and marketing script.
-- 31 relative HTML references resolved locally before adding device test harness.
-- No external runtime scripts, fonts, AI calls or analytics dependencies.
-- Original code preserved at fieldkit-v1.8.0-stable, commit 61a68a721ad3ab072d155e024d00b05aa503fa0a.
+- All 38 existing packing, persistence, import/export and recovery regression checks pass.
+- Internal links, manifest icons and local theme assets resolve.
+- New CSS block structure and service-worker JavaScript syntax checked.
+- External fonts, tracking, accounts and paid services: none added.
+- Prior stable snapshot: fieldkit-v1.9.2-stable.
+- Managed preview remains unavailable because bwrap cannot mount proc. No alternate preview server was started.
 
-## Browser QA
-- Managed local preview unavailable: supervisor failed with `bwrap: Can't mount proc ... Operation not permitted`. `sites-preview status` confirms stopped. No replacement server was started.
-- v1.9.0 GitHub Pages run 39052823008 completed successfully for commit 5b6021d2823434173575ba411e2eb83e70aaf732.
-- v1.9.0 published browser: new product page rendered; app add → detail form retained name/count; weights and notes saved; reload retained the item; search worked; move-to-Empty, refill, Archive, restore, Undo, and cancelled permanent-delete confirmation behaved correctly.
-- Phone frames: 393 × 852 CSS pixels, both product and app inspected visually. Mobile bottom navigation worked, kit rename and per-kit weight updated consistently.
-- This QA exposed desktop navigation stacking and contrast defects, corrected in v1.9.1. Marketing mobile header and headline also tightened.
-- Browser download-event capture timed out in the test environment. File export/import serialization is covered automatically; a JSON-text backup/restore fallback was added and covered by automated checks. Do not claim end-to-end file transfer was verified.
-- v1.9.1 Pages run 39053288057 succeeded at c5a65310ee7bb9dac063d6a813a391f85bb48409. Published desktop navigation and search colors were visually verified.
-- v1.9.1: actual pointer drag moved QA gear from Packed to Need verify while retaining quantity and weight.
-- v1.9.1: JSON text export → change quantity → restore exported text → confirmation → original count restored. Kit names survived in backup. This is an actual browser restore, not just a serialization check.
-- v1.9.1: interactive marketing sample refill/empty and FAQ expansion worked.
-- The normal URL briefly served cached v1.9.0 while the versioned URL served v1.9.1. v1.9.2 adds versioned entry links and worker cache revalidation; this is the final publishing correction.
-- Final v1.9.2 observations will be retained in a separate QA record branch without causing a documentation-only production deployment.
-- tests/device.html provides fixed 393 × 852 CSS-pixel frames for the published app and marketing page. This tests responsive browser layout, not physical iPhone hardware or Safari-specific behavior.
+## Published validation
+To be recorded after deployment in fieldkit-v1.10.0-qa, without another production deployment.
+- Check app and public site at 393 x 852 CSS-pixel frames and desktop.
+- Inspect title/header contrast, Empty gear, navigation, kit cards, add/edit sheets and move menu.
+- Confirm version v1.10.0, no horizontal overflow and Pages success.
 
-## Manual/device limits
-- iPhone installation, actual offline reconnection, camera capture, virtual keyboard and physical touch gestures require a device/browser with those capabilities. Do not infer them from VM checks or a desktop viewport.
+## Limits carried forward
+Physical iPhone/Safari, home-screen installation, camera, print output and actual offline network recovery were not verified in the previous release. This theme change does not claim to verify those capabilities. Prior full file-download capture was limited by the browser environment; JSON-text restore had been verified.

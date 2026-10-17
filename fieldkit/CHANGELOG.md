@@ -1,5 +1,15 @@
 # FieldKit changelog
 
+## v1.10.0 — 2026-10-17
+
+- Alpine field-guide theme across the app, acquisition page, help and release notes. Deep forest, warm sand and brass palette with editorial serif headings.
+- Original lightweight mountain illustration, illustrated inventory header, refined metrics, storage rows, kit cards, forms and bottom navigation.
+- Larger contrast between active gear and greyed Empty items; accessible focus and reduced-motion support retained.
+- Updated brand marks, install icons and social image; versioned local assets precached for offline use. No external fonts or tracking.
+- Theme-only release: application JavaScript and storage behavior unchanged. Existing 38 regressions pass. Published visual verification follows deployment.
+- Rollback snapshot: fieldkit-v1.9.2-stable, f65f79556660a3a82dbebefa7950e5044055ffd5.
+
+
 ## v1.9.2 — 2026-10-17
 
 - Versioned launch and information links prevent returning visitors from seeing stale cached HTML after deployment.
