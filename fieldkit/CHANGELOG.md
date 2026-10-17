@@ -1,5 +1,14 @@
 # FieldKit changelog
 
+## v1.13.0 — 2026-10-17
+
+- New default two-column gear Gallery with large image/icon covers and full-width quantity controls. List view remains one tap away and the choice is saved independently of inventory.
+- Original illustrated bag covers across the kit gallery; crisp white/black/yellow Notes-inspired styling replaces the previous beige design.
+- Entire app stylesheet rewritten. Visible mobile version; regular URL verified after deployment.
+- Inventory data, order, keys and all Empty/Archive/packing semantics preserved.
+- Rollback: fieldkit-v1.12.1-stable, 6fd45b7e1023e933a71d1c192afb84d125ccea8a.
+
+
 ## v1.12.1 — 2026-10-17
 
 - All/Empty/Archive counts now match the selected kit.
