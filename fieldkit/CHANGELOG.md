@@ -1,5 +1,11 @@
 # FieldKit changelog
 
+## v1.13.1 — 2026-10-17
+
+- Empty Archive placeholder spans the gallery width and has a centered, rounded layout.
+- Verified the regular URL loads the new Gallery. Mobile Gallery/List preference persists across reload; quantity add/Undo and kit artwork checked live.
+
+
 ## v1.13.0 — 2026-10-17
 
 - New default two-column gear Gallery with large image/icon covers and full-width quantity controls. List view remains one tap away and the choice is saved independently of inventory.
