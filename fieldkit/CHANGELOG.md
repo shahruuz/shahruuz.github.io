@@ -1,5 +1,16 @@
 # FieldKit changelog
 
+## v1.9.0 — 2026-10-17
+
+- Free public launch selected by the owner. New discover.html acquisition page, interactive sample, privacy/help, release notes, share image and structured metadata.
+- Unified field-journal theme, phone navigation, starter onboarding, refill filter, optional per-unit weights and kit totals, editable kit names and print stylesheet.
+- Install manifest and versioned offline app-shell worker. No third-party runtime dependencies, analytics or cloud inventory upload.
+- JSON backups retain kit names and weights; recovery snapshot before import/reset; strict import validation and duplicate rejection; unreadable saved data is retained.
+- Existing storage keys, one-time packing marker, Empty/Archive workflow and packing move behavior preserved.
+- Rollback: immutable fieldkit-v1.8.0-stable at 61a68a721ad3ab072d155e024d00b05aa503fa0a.
+- Validation: existing 24 packing regressions pass. Additional release checks and published browser verification are recorded in TESTING.md.
+
+
 ## v1.8.0 — 2026-10-17
 
 - Drag an item by its photo/grip into Packed in bag, Need verify or Empty, on desktop or touch screens. A fixed drop tray avoids dragging through a long list.
