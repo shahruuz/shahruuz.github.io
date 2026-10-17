@@ -1,5 +1,11 @@
 # FieldKit changelog
 
+## v1.11.1 — 2026-10-17
+
+- Corrected release notes to describe the current Notes-inspired theme and removed superseded alpine copy.
+- No inventory logic or data changes.
+
+
 ## v1.11.0 — 2026-10-17
 
 - iPhone Notes-inspired theme: system typography, yellow actions, grouped lists, colorful gear icons and visual kit cards.
