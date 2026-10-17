@@ -1,5 +1,13 @@
 # FieldKit changelog
 
+## v1.9.1 — 2026-10-17
+
+- Published-browser QA fixed the desktop navigation stacking, search contrast, kit/stat headings and inherited dark-theme colors.
+- Added a JSON text backup/restore fallback for browsers that block file downloads.
+- Tightened the mobile product header and headline to fit the phone viewport.
+- Retains v1.9.0 behavior and data format; 36 behavior regressions pass.
+
+
 ## v1.9.0 — 2026-10-17
 
 - Free public launch selected by the owner. New discover.html acquisition page, interactive sample, privacy/help, release notes, share image and structured metadata.
