@@ -288,9 +288,10 @@ const defaultSpot=(place,category,name)=>{
  if(/propane|fuel canister|butane|gas cylinder/i.test(name))return 'F — outdoor fuel storage';
  return ({'Fire & fuel':'S1 — ignition','Light & power':'S2 — power','Tools':'S3 — tools','Kitchen':'S4 — outdoor kitchen','Medical & hygiene':'S5 — cleaning & care'})[category]||'Shared — sort';
 };
-const initial=()=>template.map((x,i)=>({id:'seed'+i,name:x[0],place:x[1],category:x[2],status:x[3],spot:defaultSpot(x[1],x[2],x[0]),qty:1,note: x[0].includes('video')?'Seen in video; location and quantity not verified':'Suggested location; do not assume packed',photo:'',source:x[0].includes('video')?'video':'suggested'}));
-// Keep v1 storage key: existing users retain their local inventory.
+const initial=()=>template.map((x,i)=>({id:'seed'+i,name:x[0],place:x[1],category:x[2],status:x[3],spot:defaultSpot(x[1],x[2],x[0]),qty:0,note: x[0].includes('video')?'Seen in video; location and quantity not verified':'Suggested location; do not assume packed',photo:'',source:x[0].includes('video')?'video':'suggested'}));
+// Keep v1 storage key so existing items, notes, photos and locations remain available.
 const KEY='fieldkit_inventory_v1';
+const EMPTY_START_KEY='fieldkit_empty_start_2026_v1';
 let items=[],current='inventory',openZone=null,pendingPhoto='',inventoryView='active',quickEditing=null,quickReturnZone=null,undoAction=null,toastTimer=null,quickSaveTimer=null;
 const $=id=>document.getElementById(id);
 const activeItems=()=>items.filter(i=>!i.archived);
@@ -301,7 +302,7 @@ const glyph=name=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" st
 const categoryStyle=c=>({'Water & food':'water','Light & power':'power','Fire & fuel':'fire','Medical & hygiene':'medical','Tools':'tools'})[c]||'';
 const icon=c=>glyph(({'Safety':'compass','Water & food':'water','Light & power':'light','Fire & fuel':'fire','Clothing & shelter':'shelter','Medical & hygiene':'medical','Tools':'tools','Kitchen':'kitchen','Documents':'doc'})[c]||'box');
 
-function load(){try{let obj=JSON.parse(localStorage.getItem(KEY));items=Array.isArray(obj?.items)?obj.items:initial()}catch{items=initial()}}
+function load(){try{let obj=JSON.parse(localStorage.getItem(KEY));items=Array.isArray(obj?.items)?obj.items:initial()}catch{items=initial()}if(!localStorage.getItem(EMPTY_START_KEY)){items=items.map(i=>i.archived?i:{...i,qty:0});persist();try{localStorage.setItem(EMPTY_START_KEY,'1')}catch{}}}
 function persist(){try{localStorage.setItem(KEY,JSON.stringify({version:4,updated:new Date().toISOString(),items}));$('saveState').textContent='Saved on this device'}catch(e){$('saveState').textContent='Not saved · storage full';toast('Storage full — export inventory or remove large photos.')}}
 function toast(message,action){$('toastText').textContent=message;undoAction=action||null;const b=$('undoAction');b.classList.toggle('hidden',!action);$('toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>{ $('toast').classList.remove('show');undoAction=null },action?7200:3100)}
 function refresh(){renderBags();renderInventory();if(openZone)renderDetail(openZone)}
