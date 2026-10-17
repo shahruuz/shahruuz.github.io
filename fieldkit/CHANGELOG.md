@@ -1,5 +1,12 @@
 # FieldKit changelog
 
+## v1.11.2 — 2026-10-17
+
+- Collapsed unused Packed/Verify drop areas so gear appears sooner. Empty destinations reappear during dragging; tap-to-move remains available.
+- Live desktop and 393 × 852 browser-frame inspection; add sheet, kits, filters and expandable help checked.
+- All 38 regression checks pass; inventory logic unchanged.
+
+
 ## v1.11.1 — 2026-10-17
 
 - Corrected release notes to describe the current Notes-inspired theme and removed superseded alpine copy.

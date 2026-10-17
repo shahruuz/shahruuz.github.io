@@ -1,4 +1,4 @@
-# FieldKit v1.11.1 verification
+# FieldKit v1.11.2 verification
 
 - Inventory application script byte-identical to v1.10.1.
 - All 38 existing workflow, persistence, recovery and import/export regression checks pass.
