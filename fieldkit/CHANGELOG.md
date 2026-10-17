@@ -1,5 +1,13 @@
 # FieldKit changelog
 
+## v1.9.2 — 2026-10-17
+
+- Versioned launch and information links prevent returning visitors from seeing stale cached HTML after deployment.
+- Offline worker revalidates network responses and precaches the versioned app entry.
+- Phone viewport QA harness now loads the exact deployed app and product-page version.
+- Published v1.9.1 checks passed: visible desktop navigation and search, complete JSON-text backup/restore, actual pointer drag to Need verify and persisted weights/kit names. Behavior tests: 38 pass.
+
+
 ## v1.9.1 — 2026-10-17
 
 - Published-browser QA fixed the desktop navigation stacking, search contrast, kit/stat headings and inherited dark-theme colors.

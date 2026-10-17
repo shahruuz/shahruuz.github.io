@@ -1,4 +1,4 @@
-# FieldKit v1.9.1 validation
+# FieldKit v1.9.2 validation
 
 ## Before deployment
 - `node fieldkit/tests/verify.cjs`: 38 behavior checks pass.
@@ -15,7 +15,12 @@
 - Phone frames: 393 × 852 CSS pixels, both product and app inspected visually. Mobile bottom navigation worked, kit rename and per-kit weight updated consistently.
 - This QA exposed desktop navigation stacking and contrast defects, corrected in v1.9.1. Marketing mobile header and headline also tightened.
 - Browser download-event capture timed out in the test environment. File export/import serialization is covered automatically; a JSON-text backup/restore fallback was added and covered by automated checks. Do not claim end-to-end file transfer was verified.
-- Final v1.9.1 published observations will be retained in a separate QA record branch without causing a documentation-only production deployment.
+- v1.9.1 Pages run 39053288057 succeeded at c5a65310ee7bb9dac063d6a813a391f85bb48409. Published desktop navigation and search colors were visually verified.
+- v1.9.1: actual pointer drag moved QA gear from Packed to Need verify while retaining quantity and weight.
+- v1.9.1: JSON text export → change quantity → restore exported text → confirmation → original count restored. Kit names survived in backup. This is an actual browser restore, not just a serialization check.
+- v1.9.1: interactive marketing sample refill/empty and FAQ expansion worked.
+- The normal URL briefly served cached v1.9.0 while the versioned URL served v1.9.1. v1.9.2 adds versioned entry links and worker cache revalidation; this is the final publishing correction.
+- Final v1.9.2 observations will be retained in a separate QA record branch without causing a documentation-only production deployment.
 - tests/device.html provides fixed 393 × 852 CSS-pixel frames for the published app and marketing page. This tests responsive browser layout, not physical iPhone hardware or Safari-specific behavior.
 
 ## Manual/device limits
