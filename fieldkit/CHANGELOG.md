@@ -1,5 +1,12 @@
 # FieldKit changelog
 
+## v1.10.1 — 2026-10-17
+
+- Refined small-label and Empty-item contrast while preserving the alpine palette.
+- Desktop and 393 x 852 mobile layout inspected live; no horizontal overflow.
+- Inventory application script remains byte-identical to v1.9.2; all 38 existing regressions pass.
+
+
 ## v1.10.0 — 2026-10-17
 
 - Alpine field-guide theme across the app, acquisition page, help and release notes. Deep forest, warm sand and brass palette with editorial serif headings.

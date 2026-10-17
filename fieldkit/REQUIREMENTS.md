@@ -1,6 +1,6 @@
 # FieldKit requirements and decisions
 
-Updated 2026-10-17. Release target: v1.10.0.
+Updated 2026-10-17. Release target: v1.10.1.
 
 ## Agreed requirements
 - Own design, implementation, testing, fixes, deployment and published verification.
