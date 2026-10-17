@@ -1,5 +1,14 @@
 # FieldKit changelog
 
+## v1.11.0 — 2026-10-17
+
+- iPhone Notes-inspired theme: system typography, yellow actions, grouped lists, colorful gear icons and visual kit cards.
+- Removed the decorative hero from the app. Shortened copy and moved storage/safety, gestures and advanced guidance into expandable help.
+- Matching public website, Notes-style brand mark and updated offline shell. No external assets, tracking or costs.
+- Inventory script, storage keys and all inventory data semantics unchanged. All 38 regression checks pass.
+- Rollback: fieldkit-v1.10.1-stable at c637adbdb8803fe79ba48c0e8631ad0742cf2055.
+
+
 ## v1.10.1 — 2026-10-17
 
 - Refined small-label and Empty-item contrast while preserving the alpine palette.

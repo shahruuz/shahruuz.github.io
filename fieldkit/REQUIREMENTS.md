@@ -16,7 +16,7 @@ Updated 2026-10-17. Release target: v1.10.1.
 - Preserve stable snapshot branches and leave unrelated repository pages untouched.
 
 ## Decisions
-- 2026-10-17 — User requested an improved theme. Apply an alpine field-guide visual system across the app and website; preserve behavior, data, free launch and $0 budget.
+- 2026-10-17 — Latest user correction supersedes alpine styling: use a native iPhone Notes-inspired theme, more visuals, less explanation. Apply system typography, yellow accents, grouped white lists, colored gear and kit icons. Keep long guidance in expandable help. Preserve behavior, data, free launch and $0 budget.
 - 2026-10-17 — User selected **Free public launch**, postponing charging. No checkout or subscription promises.
 - Public acquisition page lives at discover.html; existing root opens the app directly so existing users keep their workflow.
 - Local browser storage remains the data model. No cloud sync, telemetry, external fonts, analytics or AI API. Photos are manual attachments, not automatic recognition.
