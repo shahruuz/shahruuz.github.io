@@ -1,5 +1,14 @@
 # FieldKit changelog
 
+## v1.12.0 — 2026-10-17
+
+- Rebuilt the app hierarchy: gear immediately below search and visual kit shortcuts; All, Empty and Archive views; filters on demand.
+- Explicit status buttons open packing moves; visual kit cards and clearer kit detail sheet.
+- Secondary statistics, print and installation moved to More. One cohesive application stylesheet replaces accumulated theme layers.
+- Storage keys, quantities, photos, notes, order and Empty/Archive semantics preserved.
+- Rollback: fieldkit-v1.11.2-stable at d5582225a1317dcfc007e82ef76de603263d8bd8.
+
+
 ## v1.11.2 — 2026-10-17
 
 - Collapsed unused Packed/Verify drop areas so gear appears sooner. Empty destinations reappear during dragging; tap-to-move remains available.

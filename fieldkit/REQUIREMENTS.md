@@ -16,6 +16,7 @@ Updated 2026-10-17. Release target: v1.10.1.
 - Preserve stable snapshot branches and leave unrelated repository pages untouched.
 
 ## Decisions
+- 2026-10-17 — User rejected v1.11.2 as visually broken and requested an improved overall experience. Rebuild the app hierarchy: gear first, compact search and visual kit shortcuts, explicit move controls, and More for secondary tools. Retain the requested Notes-inspired direction and all packing/data rules. Replace competing app theme layers with one app stylesheet.
 - 2026-10-17 — Latest user correction supersedes alpine styling: use a native iPhone Notes-inspired theme, more visuals, less explanation. Apply system typography, yellow accents, grouped white lists, colored gear and kit icons. Keep long guidance in expandable help. Preserve behavior, data, free launch and $0 budget.
 - 2026-10-17 — User selected **Free public launch**, postponing charging. No checkout or subscription promises.
 - Public acquisition page lives at discover.html; existing root opens the app directly so existing users keep their workflow.

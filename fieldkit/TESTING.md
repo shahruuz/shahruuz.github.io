@@ -1,9 +1,7 @@
-# FieldKit v1.11.2 verification
+# FieldKit v1.12.0 verification
 
-- Inventory application script byte-identical to v1.10.1.
-- All 38 existing workflow, persistence, recovery and import/export regression checks pass.
-- Local asset references resolve; CSS block structure and service worker syntax checked.
-- User data and storage keys unchanged. No spending, trackers, external fonts or new services.
-- Rollback: fieldkit-v1.10.1-stable.
-- Managed preview previously blocked by bwrap proc mount. Published browser verification follows deployment.
-- Desktop phone viewport testing does not verify physical iPhone hardware, camera or installation.
+- 41 regression checks pass, including new kit shortcut, view reset and explicit move-control checks.
+- Existing storage keys and packing reset marker unchanged. All quantity, archive, recovery and persistence checks pass.
+- App uses one versioned stylesheet; zero inline theme blocks. JS syntax, CSS block counts, HTML IDs, nested buttons and local asset references checked.
+- Rollback: fieldkit-v1.11.2-stable at d5582225a1317dcfc007e82ef76de603263d8bd8.
+- Local preview blocked by bwrap proc mount; published visual and workflow verification follows deployment. Physical iPhone/Safari remains unverified.
