@@ -1,5 +1,13 @@
 # FieldKit changelog
 
+## v1.12.1 — 2026-10-17
+
+- All/Empty/Archive counts now match the selected kit.
+- Tightened visual kit cards and made refill actions consistently yellow.
+- Mobile live checks: kit shortcuts, filters, explicit packing moves with Undo, full-screen kit sheet and quick add. No horizontal overflow.
+- 42 regression checks pass.
+
+
 ## v1.12.0 — 2026-10-17
 
 - Rebuilt the app hierarchy: gear immediately below search and visual kit shortcuts; All, Empty and Archive views; filters on demand.
