@@ -1,6 +1,6 @@
 # FieldKit requirements and decisions
 
-Updated 2026-10-17 (America/Denver). Release baseline: v1.13.1 (main ce8f776). In progress: v1.14.0 checklist (branch fieldkit-v1.14.0-work, not yet published).
+Updated 2026-10-18 (America/Denver). Release baseline: v1.13.1 (main ce8f776). Published: v1.14.0 (1797085). In progress: v1.15.0.
 
 Each decision is marked **User** (Shahrouz decided or stated it) or **Proposal** (an assistant suggestion that is not approved until the user confirms it).
 
@@ -12,7 +12,7 @@ Each decision is marked **User** (Shahrouz decided or stated it) or **Proposal**
 - Keep fieldkit_inventory_v1 and fieldkit_empty_start_2026_v1 unchanged. Never repeat the one-time packing reset.
 - Quantity 1 → 0 retains the item greyed under Empty on the inventory page.
 - Another minus at 0 archives; restore is reversible; permanent deletion only in Archive, with confirmation.
-- Support pointer drag and an accessible touch/keyboard move menu for Packed, Need verify and Empty. Retain last positive quantity for refill.
+- Support pointer drag and an accessible touch/keyboard move menu for Packed, To pack and Empty. Retain last positive quantity for refill.
 - Dedicated go-bag gear stays dedicated; shared gear belongs in Shared station.
 - App opens directly to Inventory.
 - Test save/reload, packing, backup/restore and mobile at 393 × 852 CSS pixels (iPhone 14 Pro).
@@ -23,7 +23,10 @@ Each decision is marked **User** (Shahrouz decided or stated it) or **Proposal**
 - **User:** "Keep it like native iPhone Notes app theme with more visuals, less explanation."
 - **User, 2026-10-17:** Rejected the published v1.13.x design ("Nope, I don't like it"). The two-column gear gallery, illustrated bag covers, pastel category panels, large counters and earlier layouts are **rejected attempts, not approved branding**.
 - **User, 2026-10-17 (late):** chose the open-checklist mockup (option B) as the inventory design, with the goal of one picture per kit that updates inventory directly.
-- **Proposal:** the folders-list option (A) is not chosen. Photos are hidden in checklist view; the user has not yet decided whether that is acceptable.
+- **User, 2026-10-18:** did not like the v1.14.0 checklist theme; asked to reimagine it with a more immersive experience and a workflow that solves organizing once and for all, then said "do your best".
+- **User, 2026-10-18:** "Need verify" must go completely.
+- **Proposal (implemented v1.15.0):** combined concept — kit overview with progress rings, full-screen kit checklist, tap the circle to pack. Stored "check" values are kept and shown as To pack (no migration). Photo thumbnails show when attached. Pending user review.
+- **User, 2026-10-18:** asked about updating inventory from a photo. No free automatic option exists; a paid vision API would need cost and privacy approval. Not built.
 - **User:** "More visuals" does not mean dashboards, large counters, decorative marketing copy or a pastel card gallery.
 
 ## Other decisions

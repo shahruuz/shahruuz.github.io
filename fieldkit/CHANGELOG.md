@@ -1,5 +1,15 @@
 # FieldKit changelog
 
+## v1.15.0 — 2026-10-18
+
+- Removed the "Need verify" state from every screen (user decision). Packing is now To pack → Packed, with Empty kept in the same list.
+- Tap the circle to pack or unpack, with Undo. Tapping an empty item packs it with its remembered count. − at zero still archives; deletion stays in Archive with confirmation. Drag onto a section and the Move menu (Edit → Move…) remain available.
+- Items saved earlier as "verify" keep that stored value and simply appear under To pack; editing one keeps it unless you change its status. No stored data is migrated.
+- Kits screen rebuilt: one overview bar (packed / to pack / empty) and a kit list with progress rings. Kit opens full screen with a large ring, Add gear and the kit checklist. Illustrated kit covers and the gallery are removed.
+- New single iPhone-style stylesheet replaces the layered themes; real photo thumbnails show in rows when attached; zero weights are hidden; the List/Gallery switch is retired.
+- 49 regression checks pass (6 new: tap-to-pack with Undo, legacy verify display, edit preservation, Move button, empty search, kit rings).
+- Rollback: fieldkit-v1.13.1-stable (ce8f776) or v1.14.0 commit 1797085.
+
 ## v1.14.0 — 2026-10-18
 
 - Inventory now opens as an iPhone Notes-style checklist, replacing the rejected gallery as the default. Each kit's items are grouped as Packed in bag, Need verify and In storage / day-of, with Empty listed in the same screen.
