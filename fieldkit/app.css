@@ -1,4 +1,4 @@
-/* FieldKit v1.21.1 — iPhone Notes-style app theme. Single application stylesheet. */
+/* FieldKit v1.22.0 — iPhone Notes-style app theme. Single application stylesheet. */
 :root{
   color-scheme:light;
   font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",system-ui,sans-serif;
@@ -102,10 +102,6 @@ p{margin:8px 0}
 /* Rows */
 .swipe-row{position:relative;overflow:hidden;isolation:isolate}
 .swipe-row+.swipe-row:before{content:"";position:absolute;top:0;left:52px;right:0;border-top:.5px solid var(--sep);z-index:2;pointer-events:none}
-.swipe-background{position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;background:#248a3d;color:#fff;font-size:12px;font-weight:700;pointer-events:none}
-.swipe-background span{padding:0 18px}
-.moving-left .swipe-background{background:#d70015}
-.moving-left .swipe-right-label,.moving-right .swipe-left-label{visibility:hidden}
 .item{display:flex;align-items:center;gap:6px;min-height:56px;padding:4px 6px 4px 4px}
 .swipe-surface{position:relative;background:var(--card);touch-action:pan-y;user-select:none;-webkit-user-select:none}
 .main{flex:1;min-width:0}
@@ -469,3 +465,19 @@ textarea{resize:vertical;min-height:96px}
 @media(max-width:420px){.entity-grip,.entity-more{flex-basis:32px;min-width:32px}.entity-card .bag{padding-left:10px}.entity-card .ring{width:46px;height:46px;flex-basis:46px}.entity-card .trip-mini{font-size:26px;padding:4px 5px}.entity-sheet{padding-left:16px;padding-right:16px}.swipe-surface>.entity-grip{flex-basis:24px;min-width:24px}}
 @media print{.entity-grip,.entity-more,.entity-layer,.entity-ghost,.entity-drop-dock,.kits-tools,.planner-custom-tools{display:none!important}.entity-surface{transform:none!important}}
 .custom-fields>summary{display:flex;align-items:center;min-height:44px;font-size:15px;color:var(--tint)}.preset-tools{display:flex;justify-content:space-between;gap:10px}.entity-layer .hint{line-height:1.5}.entity-drag-active .weight-pill[data-assign-person]{background:var(--yellow-soft)}
+
+/* Consistent swipe-to-reveal. Swiping alone never changes stock or packing. */
+[data-entity-kind]{position:relative;isolation:isolate;touch-action:pan-y pinch-zoom}
+.entity-surface,.swipe-surface{transition:transform .18s ease-out;touch-action:pan-y pinch-zoom;position:relative;z-index:1}
+.swipe-tracking>.entity-surface,.swipe-tracking>.swipe-surface{transition:none}
+.swipe-actions{position:absolute;top:0;bottom:0;z-index:0;display:flex;align-items:stretch;pointer-events:none}
+.swipe-actions-leading{left:0}.swipe-actions-trailing{right:0}
+.swipe-action{width:80px;min-width:80px;min-height:48px;padding:8px 4px;border:0;border-radius:0;font-size:14px;font-weight:600;line-height:1.2;white-space:normal;color:#fff}
+.swipe-green{background:#28663b}.swipe-blue{background:#285c95}.swipe-amber{background:#835b00}.swipe-red{background:#ad2332}.swipe-gray{background:#5a5a61}
+.swipe-open>.swipe-actions[aria-hidden=false]{pointer-events:auto;z-index:2}
+.swipe-open>.swipe-actions-leading[aria-hidden=false]{width:fit-content}.swipe-open>.swipe-actions-trailing[aria-hidden=false]{width:fit-content}
+.trip-swipe-row{background:var(--card);border-radius:0;border-bottom:1px solid var(--sep)}.trip-swipe-row .trip-item{flex:1;width:100%;min-width:0;border-bottom:0}.trip-swipe-row .entity-surface{align-items:stretch}
+@media(prefers-reduced-motion:reduce){.entity-surface,.swipe-surface{transition:none}}
+@media print{.swipe-actions{display:none!important}.entity-surface,.swipe-surface{transform:none!important}}
+
+.entity-surface,.swipe-surface{will-change:auto}.swipe-tracking>.entity-surface,.swipe-tracking>.swipe-surface{will-change:transform}

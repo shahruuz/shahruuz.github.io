@@ -1,6 +1,6 @@
 /* FieldKit touch interactions: data edits are atomic; inputs keep native gestures. */
 'use strict';
-let customization={zoneOrder:[],tripOrder:[],zones:{}},entityContext=null,entityReturnFocus=null,entityPreviousOverflow='',touchDrag=null,entitySuppressUntil=0;
+let customization={zoneOrder:[],tripOrder:[],zones:{}},entityContext=null,entityReturnFocus=null,entityPreviousOverflow='',touchDrag=null;
 const entityClone=x=>JSON.parse(JSON.stringify(x));
 const entityText=(x,max=200)=>String(x??'').trim().slice(0,max);
 const entityId=()=>Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,8);
@@ -21,9 +21,9 @@ function entityNudge(kind,id,delta){let list;if(kind==='gear')list=(current==='b
 function entityMoveGear(id,zone){const i=items.find(x=>x.id===id);if(!i||!Object.hasOwn(ZONES,zone))return false;if(/propane|fuel canister|butane|gas cylinder/i.test(i.name)&&zone!=='shared'){toast('Fuel stays in outdoor storage; use item details for deliberate storage edits.');return false}if(i.place!==zone&&zoneProtected(i.place)){toast('Dedicated emergency gear: reassign its storage deliberately in item details.');return false}return entityCommit(()=>{i.place=zone},'Gear moved to '+ZONES[zone].name)}
 function entityAssignTrip(id,person,bag){const p=planCurrent(),r=p?.items.find(x=>x.inventoryId===id),i=items.find(x=>x.id===id);if(!p||!r||p.state==='ended')return false;if(/propane|fuel canister|butane|gas cylinder/i.test(i?.name||'')&&bag!=='Outdoor fuel storage'){toast('Fuel stays in outdoor storage');return false}return entityCommit(()=>{r.person=entityText(person,60)||'Shared';r.bag=entityText(bag,60)||'Day bag';r.locked=true},'Bag assignment saved')}
 function entityGrip(kind,id,label){return `<button class="entity-grip" type="button" data-drag-kind="${kind}" data-drag-id="${esc(id)}" aria-label="Reorder ${esc(label)}" title="Hold, then drag. Tap for move controls.">⠿</button>`}
-function entityCard(kind,id,body,label,readonly=false){if(readonly)return `<div class="entity-card"><div class="entity-surface">${body}</div></div>`;return `<div class="entity-card" data-entity-kind="${kind}" data-entity-id="${esc(id)}"><div class="entity-swipe-hint" aria-hidden="true"><span>✎ Customize</span><span>Actions ⋯</span></div><div class="entity-surface">${body}${entityGrip(kind,id,label)}<button type="button" class="entity-more" data-entity-menu="${kind}" data-entity-id="${esc(id)}" aria-label="Actions for ${esc(label)}">⋯</button></div></div>`}
+function entityCard(kind,id,body,label,readonly=false){if(readonly)return `<div class="entity-card"><div class="entity-surface">${body}</div></div>`;return `<div class="entity-card" data-entity-kind="${kind}" data-entity-id="${esc(id)}">${entitySwipeRails(kind,id)}<div class="entity-surface">${body}${entityGrip(kind,id,label)}<button type="button" class="entity-more" data-entity-menu="${kind}" data-entity-id="${esc(id)}" aria-label="Actions for ${esc(label)}">⋯</button></div></div>`}
 function entityLabel(kind,id){if(kind==='gear')return items.find(i=>i.id===id)?.name||'Gear';if(kind==='kit')return ZONES[id]?.name||'Kit';if(kind==='trip')return tripPlans.find(p=>p.id===id)?.name||'Trip';if(kind==='missing')return planCurrent()?.missing[Number(id)]?.name||'Missing item';return items.find(i=>i.id===id)?.name||'Trip item'}
-function entityOpen(kind,id){if(!$('entityLayer').classList.contains('hidden')&&entityContext?.kind===kind&&entityContext.id===id)return;entityContext={kind,id,planId:plannerTripId};entityReturnFocus=document.activeElement;entityPreviousOverflow=document.body.style.overflow||'';$('entityTitle').textContent=entityLabel(kind,id);$('entityLayer').classList.remove('hidden');document.body.style.overflow='hidden';entityActions();$('entityClose').focus()}
+function entityOpen(kind,id){resetEntityGesture();if(!$('entityLayer').classList.contains('hidden')&&entityContext?.kind===kind&&entityContext.id===id)return;entityContext={kind,id,planId:plannerTripId};entityReturnFocus=document.activeElement;entityPreviousOverflow=document.body.style.overflow||'';$('entityTitle').textContent=entityLabel(kind,id);$('entityLayer').classList.remove('hidden');document.body.style.overflow='hidden';entityActions();$('entityClose').focus()}
 function entityClose(){if($('entityLayer').classList.contains('hidden'))return;$('entityLayer').classList.add('hidden');document.body.style.overflow=entityPreviousOverflow;entityContext=null;const target=entityReturnFocus?.isConnected?entityReturnFocus:!$('plannerLayer').classList.contains('hidden')?$('plannerClose'):$('detail').classList.contains('show')?$('detailClose'):$('appMain');target.focus({preventScroll:true})}
 function entityButton(action,text){return `<button type="button" class="entity-action" data-entity-action="${action}">${text}</button>`}
 function entityActions(){const {kind,id}=entityContext;let html=entityButton('edit','✎ Customize');if(kind==='gear'){html+=entityButton('quick','Quick edit')+entityButton('move','Move to kit / storage')+entityButton('status','Packing status');const i=items.find(x=>x.id===id);html+=entityButton('archive',i?.archived?'Restore from Archive':'Archive gear')}if(kind==='kit')html+=entityButton('hide',zoneMeta(id).hidden?'Show kit':'Hide kit');if(kind==='trip')html+=entityButton('duplicate','Duplicate as a new trip')+entityButton('hide',tripPlans.find(p=>p.id===id)?.hidden?'Show trip':'Hide trip');if(kind==='trip-item')html+=entityButton('gear-details','Edit owned gear details')+entityButton('remove','Remove from this trip');if(kind==='missing')html+=entityButton('acquire','Mark acquired')+entityButton('remove','Remove from missing list');html+=entityButton('up','↑ Move up')+entityButton('down','↓ Move down');$('entityBody').innerHTML=html}
@@ -40,19 +40,192 @@ function renderHiddenEntities(){const host=$('hiddenEntities');if(!host)return;c
 function entityAction(action){if(!entityContext)return;const {kind,id}=entityContext;if(action==='back'){entityActions();return}if(action==='up'||action==='down'){entityNudge(kind,id,action==='up'?-1:1);return}if(action==='edit'){if(kind==='kit')entityEditKit(id);else if(kind==='trip')entityEditTrip(id);else if(kind==='missing')entityEditMissing(id);else {entityClose();if(kind==='gear')advancedOpen(items.find(x=>x.id===id)?.place,id);else planEditItem(id)}return}if(action==='quick'||action==='gear-details'){entityClose();if(action==='quick')quickOpen(null,id);else {plannerClose();advancedOpen(items.find(x=>x.id===id)?.place,id)}return}if(action==='move'){entityForm('<label>Move to kit / storage<select id="entityMoveZone">'+orderedZones(true).map(([id,z])=>`<option value="${id}">${esc(z.name)}</option>`).join('')+'</select></label>');$('entityForm').onsubmit=e=>{e.preventDefault();if(entityMoveGear(id,$('entityMoveZone').value))entityClose()};return}if(action==='status'){entityClose();openMove(id);return}if(action==='archive'){entityClose();archiveItem(id);return}if(action==='duplicate'){if(entityDuplicateTrip(id))entityClose();return}if(action==='hide'){if(entityToggleHidden(kind,id))entityClose();return}if(action==='acquire'){entityClose();planAcquire(Number(id));return}if(action==='remove'){if(kind==='trip-item')entityCommit(()=>{const p=planCurrent();if(p.state==='ended')throw Error('Past trips are read-only');p.items=p.items.filter(r=>r.inventoryId!==id);if(!p.excluded.includes(id))p.excluded.push(id)},'Removed from trip · owned stock unchanged');else entityCommit(()=>{const p=planCurrent();if(p.state==='ended')throw Error('Past trips are read-only');const m=p.missing[Number(id)];p.missingExcluded=[...(p.missingExcluded||[]),m.inventoryId||m.name.toLowerCase()];p.missing.splice(Number(id),1)},'Removed from missing list');entityClose()}}
 function entityTarget(el){return el?.closest?.('[data-entity-kind][data-entity-id]')||null}
 function entityDrop(source,target){if(!target)return false;const zone=target.closest?.('[data-drop-zone]');if(source.kind==='gear'&&zone)return entityMoveGear(source.id,zone.dataset.dropZone);const assignment=target.closest?.('[data-assign-person]');if(source.kind==='trip-item'&&assignment)return entityAssignTrip(source.id,assignment.dataset.assignPerson,assignment.dataset.assignBag);const row=entityTarget(target);if(!row||row.dataset.entityKind!==source.kind)return false;if(source.kind==='gear'){const a=items.find(i=>i.id===source.id),b=items.find(i=>i.id===row.dataset.entityId);if(!a||!b||itemMoveState(a)!==itemMoveState(b)||!!a.archived!==!!b.archived)return false}return entityReorder(source.kind,source.id,row.dataset.entityId,false,source.planId)}
-function initEntityGestures(){let pending=null,swipe=null,frame=null,over=null;
- const mark=el=>{over?.classList.remove('entity-drop-over');over=el;over?.classList.add('entity-drop-over')};
- const stop=()=>{if(pending){clearTimeout(pending.timer);pending=null}if(touchDrag){touchDrag.row.classList.remove('entity-dragging');const h=touchDrag.handle,pointer=touchDrag.pointer;touchDrag=null;if(h?.hasPointerCapture?.(pointer))h.releasePointerCapture(pointer)}if(frame!==null)cancelAnimationFrame(frame);frame=null;mark(null);$('entityGhost').classList.add('hidden');$('entityDropDock').classList.add('hidden');document.body.classList.remove('entity-drag-active')};
- const tick=()=>{if(!touchDrag)return;const g=touchDrag,scroll=g.kind==='trip-item'||g.kind==='missing'?$('plannerLayer').querySelector('.scan-sheet'):openZone?$('detail').querySelector('.sheet'):window;const dy=g.y<130?-10:g.y>window.innerHeight-150?10:0;if(dy)scroll?.scrollBy({top:dy,behavior:'auto'});if(g.kind==='gear'&&g.y>window.innerHeight-140){const dock=$('entityDropDock').querySelector('div'),dx=g.x<45?-9:g.x>window.innerWidth-45?9:0;if(dx)dock?.scrollBy({left:dx,behavior:'auto'})}frame=requestAnimationFrame(tick)};
- const begin=p=>{pending=null;touchDrag={...p,x:p.startX,y:p.startY,planId:plannerTripId};p.row.classList.add('entity-dragging');document.body.classList.add('entity-drag-active');p.handle.setPointerCapture?.(p.pointer);$('entityGhost').textContent=entityLabel(p.kind,p.id);$('entityGhost').classList.remove('hidden');$('entityGhost').style.left=Math.max(8,p.startX-80)+'px';$('entityGhost').style.top=Math.max(8,p.startY-70)+'px';if(p.kind==='gear'){$('entityDropDock').innerHTML='<small>Drop into kit / storage</small><div>'+orderedZones().map(([id,z])=>`<span data-drop-zone="${id}">${esc(z.name)}</span>`).join('')+'</div>';$('entityDropDock').classList.remove('hidden')}frame=requestAnimationFrame(tick);entitySuppressUntil=Date.now()+700;};
- document.addEventListener('pointerdown',e=>{if(e.button!==0||e.isPrimary===false||selectMode||e.clientX<24||e.clientX>window.innerWidth-24)return;const grip=e.target.closest?.('[data-drag-kind]'),row=entityTarget(e.target);if(!row)return;if(grip){const p={kind:grip.dataset.dragKind,id:grip.dataset.dragId,row,handle:grip,pointer:e.pointerId,startX:e.clientX,startY:e.clientY};p.timer=setTimeout(()=>begin(p),320);pending=p;return}if(e.target.closest?.('input,textarea,select,a,[data-move],.row-stepper,.trip-check,.trip-item-actions,.entity-more,.select-dot'))return;const p={kind:row.dataset.entityKind,id:row.dataset.entityId,row,handle:null,pointer:e.pointerId,startX:e.clientX,startY:e.clientY};p.timer=setTimeout(()=>{pending=null;swipe=null;entitySuppressUntil=Date.now()+600;entityOpen(p.kind,p.id)},500);pending=p;if(['kit','trip','trip-item','missing'].includes(p.kind))swipe={...p,dx:0,active:false};});
- document.addEventListener('pointermove',e=>{if(touchDrag&&touchDrag.pointer===e.pointerId){e.preventDefault();touchDrag.x=e.clientX;touchDrag.y=e.clientY;$('entityGhost').style.left=Math.max(8,Math.min(window.innerWidth-220,e.clientX-80))+'px';$('entityGhost').style.top=Math.max(8,e.clientY-70)+'px';const el=document.elementFromPoint(e.clientX,e.clientY);mark(el?.closest?.('[data-drop-zone],[data-assign-person],[data-entity-kind]'));return}if(pending&&pending.pointer===e.pointerId&&Math.hypot(e.clientX-pending.startX,e.clientY-pending.startY)>9){clearTimeout(pending.timer);pending=null}if(!swipe||swipe.pointer!==e.pointerId)return;const dx=e.clientX-swipe.startX,dy=e.clientY-swipe.startY;if(Math.abs(dy)>Math.abs(dx)&&Math.abs(dy)>8){swipe=null;return}if(Math.abs(dx)>12&&Math.abs(dx)>Math.abs(dy)*1.3){swipe.active=true;swipe.dx=Math.max(-100,Math.min(100,dx));const surface=swipe.row.querySelector('.entity-surface')||swipe.row;surface.style.transform='translateX('+swipe.dx+'px)';swipe.row.classList.toggle('entity-swipe-left',dx<0)}},{passive:false});
- document.addEventListener('pointerup',e=>{if(touchDrag?.pointer===e.pointerId){const g=touchDrag,target=document.elementFromPoint(e.clientX,e.clientY);stop();entitySuppressUntil=Date.now()+600;if(!entityDrop(g,target))toast('Move cancelled');return}if(pending?.pointer===e.pointerId){clearTimeout(pending.timer);pending=null}if(!swipe||swipe.pointer!==e.pointerId)return;const g=swipe;swipe=null;const surface=g.row.querySelector('.entity-surface')||g.row;surface.style.transform='';g.row.classList.remove('entity-swipe-left');if(!g.active||Math.abs(g.dx)<60)return;entitySuppressUntil=Date.now()+600;if(g.kind==='trip-item'&&g.dx>0){const p=planCurrent(),r=p?.items.find(x=>x.inventoryId===g.id);if(r&&p.state!=='ended')planSetPacked(g.id,r.packed===r.quantity?0:r.quantity)}else if(g.kind==='missing'&&g.dx>0){if(planCurrent()?.state!=='ended')planAcquire(Number(g.id))}else{entityOpen(g.kind,g.id);if(g.dx>0&&(g.kind==='kit'||g.kind==='trip'))entityAction('edit')}});
- const cancel=()=>{if(swipe){const s=swipe.row.querySelector('.entity-surface')||swipe.row;s.style.transform='';swipe=null}stop()};document.addEventListener('pointercancel',cancel);document.addEventListener('lostpointercapture',()=>{if(touchDrag)cancel()});window.addEventListener('blur',cancel);
- document.addEventListener('click',e=>{if(Date.now()<entitySuppressUntil&&entityTarget(e.target)){e.preventDefault();e.stopImmediatePropagation();return}const grip=e.target.closest?.('[data-drag-kind]');if(grip){e.preventDefault();e.stopImmediatePropagation();entityOpen(grip.dataset.dragKind,grip.dataset.dragId);return}const menu=e.target.closest?.('[data-entity-menu]');if(menu){e.preventDefault();e.stopImmediatePropagation();entityOpen(menu.dataset.entityMenu,menu.dataset.entityId)}},true);
- document.addEventListener('contextmenu',e=>{const row=entityTarget(e.target);if(row&&!e.target.closest('input,textarea,select')){e.preventDefault();if(touchDrag||e.target.closest('[data-drag-kind]'))return;entityOpen(row.dataset.entityKind,row.dataset.entityId)}});
- document.addEventListener('keydown',e=>{if(e.key==='Escape'&&(touchDrag||pending)){e.preventDefault();e.stopImmediatePropagation();cancel()}},true);
+// A single axis-locked controller owns swipes, row holds and reorder grips.
+let openEntitySwipe=null,entityGhostClick=null,resetEntityGesture=()=>{};
+function suppressEntityClick(row){entityGhostClick={row,expires:Date.now()+700}}
+function consumeEntityGhostClick(e){
+ if(!entityGhostClick||Date.now()>entityGhostClick.expires){entityGhostClick=null;return false}
+ if(e.detail===0)return false; // Keyboard and assistive activation are always usable.
+ entityGhostClick=null;return true;
 }
+function entitySwipeSpecs(kind,id){
+ if(kind==='gear'){
+  const i=items.find(i=>i.id===id);
+  if(!i)return {leading:[],trailing:[]};
+  if(i.archived)return {leading:[['restore','Restore','green']],trailing:[['delete','Delete','red']]};
+  return {leading:[['plus','＋1','green'],['many','Add…','blue']],trailing:[['edit','Edit','blue'],['minus',Number(i.qty)>0?'−1':'Archive',Number(i.qty)>0?'amber':'red']]};
+ }
+ if(kind==='kit'||kind==='trip')return {leading:[['edit','Edit','blue']],trailing:[['more','More','gray']]};
+ if(kind==='trip-item'){
+  const r=planCurrent()?.items.find(r=>r.inventoryId===id),owned=items.find(i=>i.id===id&&!i.archived);
+  if(r&&r.packed<r.quantity&&r.packed>=planInt(owned?.qty))return {leading:[['edit','Edit qty','amber']],trailing:[['edit','Edit','blue'],['more','More','gray']]};
+  return {leading:[['pack',r?.packed===r?.quantity?'Unpack':'Pack','green']],trailing:[['edit','Edit','blue'],['more','More','gray']]};
+ }
+ return {leading:[['acquire','Acquired','green']],trailing:[['edit','Edit','blue'],['more','More','gray']]};
+}
+function entitySwipeRails(kind,id){
+ const spec=entitySwipeSpecs(kind,id);
+ return ['leading','trailing'].map(side=>`<div class="swipe-actions swipe-actions-${side}" data-swipe-rail="${side}" aria-hidden="true" inert>${spec[side].map(([action,label,color])=>`<button type="button" class="swipe-action swipe-${color}" data-swipe-action="${action}" aria-label="${esc(label)} ${esc(entityLabel(kind,id))}">${esc(label)}</button>`).join('')}</div>`).join('');
+}
+function entitySwipeSurface(row){return row.querySelector('.entity-surface,.swipe-surface')||row}
+function entitySwipeWidth(row,side){return entitySwipeSpecs(row.dataset.entityKind,row.dataset.entityId)[side].length*80}
+function paintEntitySwipe(row,offset,settled=false){
+ const surface=entitySwipeSurface(row);
+ row.classList.toggle('swipe-tracking',!settled&&offset!==0);
+ row.classList.toggle('swipe-open',settled&&offset!==0);
+ row.dataset.swipeOffset=String(offset);
+ row.dataset.swipeOpen=settled&&offset!==0?(offset>0?'leading':'trailing'):'';
+ surface.style.transform=offset?'translateX('+offset+'px)':'';
+ surface.inert=!!(settled&&offset);
+ for(const rail of row.querySelectorAll('[data-swipe-rail]')){
+  const visible=settled&&offset!==0&&rail.dataset.swipeRail===(offset>0?'leading':'trailing');
+  rail.inert=!visible;rail.setAttribute('aria-hidden',String(!visible));
+ }
+}
+function closeEntitySwipe(){if(openEntitySwipe){paintEntitySwipe(openEntitySwipe,0,true);openEntitySwipe=null}}
+function settleEntitySwipe(row,offset){closeEntitySwipe();paintEntitySwipe(row,offset,true);if(offset)openEntitySwipe=row}
+function entitySwipeAction(kind,id,action){
+ closeEntitySwipe();
+ if(kind==='gear'){
+  if(action==='plus')changeQty(id,1);
+  else if(action==='many')openQty(id);
+  else if(action==='minus')changeQty(id,-1);
+  else if(action==='restore')archiveItem(id);
+  else if(action==='delete')removeItem(id);
+  else if(action==='edit')quickOpen(null,id);
+  else entityOpen(kind,id);
+ }else if(action==='more')entityOpen(kind,id);
+ else if(kind==='kit'||kind==='trip'){entityOpen(kind,id);entityAction('edit')}
+ else if(kind==='trip-item'){
+  const p=planCurrent(),r=p?.items.find(r=>r.inventoryId===id);
+  if(!r||p.state==='ended')return;
+  if(action==='pack')planSetPacked(id,r.packed===r.quantity?0:r.quantity);
+  else planEditItem(id);
+ }else if(planCurrent()?.state!=='ended'){
+  if(action==='acquire')planAcquire(Number(id));
+  else{entityOpen(kind,id);entityEditMissing(id)}
+ }
+}
+function initEntityGestures(){
+ let gesture=null,hold=null,frame=null,over=null;
+ const clearHold=()=>{if(hold!==null)clearTimeout(hold);hold=null};
+ const mark=el=>{over?.classList.remove('entity-drop-over');over=el;over?.classList.add('entity-drop-over')};
+ const visible=row=>row?.isConnected!==false&&!row.closest?.('.hidden')&&(!row.getClientRects||row.getClientRects().length>0);
+ const release=(el,pointer)=>{if(el?.hasPointerCapture?.(pointer))el.releasePointerCapture(pointer)};
+ const stopDrag=()=>{
+  if(touchDrag){const g=touchDrag;touchDrag=null;g.row.classList.remove('entity-dragging');release(g.handle,g.pointer)}
+  if(frame!==null)cancelAnimationFrame(frame);frame=null;mark(null);
+  $('entityGhost').classList.add('hidden');$('entityDropDock').classList.add('hidden');document.body.classList.remove('entity-drag-active');
+ };
+ const cancel=()=>{
+  const source=touchDrag?.row||gesture?.row;if(touchDrag||gesture?.axis==='x'||gesture?.moved)suppressEntityClick(source);
+  clearHold();const old=gesture;gesture=null;
+  if(old){paintEntitySwipe(old.row,0,true);release(old.row,old.pointer)}
+  stopDrag();closeEntitySwipe();
+ };
+ resetEntityGesture=cancel;
+ const tick=()=>{
+  if(!touchDrag)return;
+  const g=touchDrag,scroll=g.kind==='trip-item'||g.kind==='missing'?$('plannerLayer').querySelector('.scan-sheet'):openZone?$('detail').querySelector('.sheet'):window;
+  const dy=g.y<130?-10:g.y>window.innerHeight-150?10:0;
+  if(dy)scroll?.scrollBy({top:dy,behavior:'auto'});
+  if(g.kind==='gear'&&g.y>window.innerHeight-140){const dock=$('entityDropDock').querySelector('div'),dx=g.x<45?-9:g.x>window.innerWidth-45?9:0;if(dx)dock?.scrollBy({left:dx,behavior:'auto'})}
+  frame=requestAnimationFrame(tick);
+ };
+ const beginDrag=p=>{
+  hold=null;if(!visible(p.row)){cancel();return}
+  gesture=null;closeEntitySwipe();touchDrag={...p,x:p.startX,y:p.startY,planId:plannerTripId};
+  p.row.classList.add('entity-dragging');document.body.classList.add('entity-drag-active');p.handle.setPointerCapture?.(p.pointer);
+  $('entityGhost').textContent=entityLabel(p.kind,p.id);$('entityGhost').classList.remove('hidden');
+  $('entityGhost').style.left=Math.max(8,p.startX-80)+'px';$('entityGhost').style.top=Math.max(8,p.startY-70)+'px';
+  if(p.kind==='gear'){$('entityDropDock').innerHTML='<small>Drop into kit / storage</small><div>'+orderedZones().map(([id,z])=>`<span data-drop-zone="${id}">${esc(z.name)}</span>`).join('')+'</div>';$('entityDropDock').classList.remove('hidden')}
+  frame=requestAnimationFrame(tick);
+ };
+ document.addEventListener('pointerdown',e=>{
+  // A fresh touch is a deliberate action, never a ghost from a previous swipe.
+  entityGhostClick=null;
+  if(e.isPrimary===false){cancel();return}
+  if(e.button!==0||selectMode)return;
+  const row=entityTarget(e.target);
+  if(openEntitySwipe&&row!==openEntitySwipe)closeEntitySwipe();
+  if(!row||e.clientX<24||e.clientX>window.innerWidth-24)return;
+  if(e.target.closest?.('[data-swipe-action]'))return;
+  if(gesture||touchDrag)cancel();
+  const base=Number(row.dataset.swipeOffset)||0;
+  const grip=e.target.closest?.('[data-drag-kind]');
+  if(!base&&!grip&&e.target.closest?.('input,textarea,select,a,[data-move],.row-stepper,.trip-check,.trip-item-actions,.entity-more,.select-dot'))return;
+  const p={kind:row.dataset.entityKind,id:row.dataset.entityId,row,handle:grip,pointer:e.pointerId,startX:e.clientX,startY:e.clientY,dx:0,axis:null,base};
+  gesture=p;
+  if(grip)hold=setTimeout(()=>beginDrag(p),320);
+  else if(!base)hold=setTimeout(()=>{
+   hold=null;if(gesture!==p||!visible(p.row))return;gesture=null;suppressEntityClick(p.row);entityOpen(p.kind,p.id);
+  },500);
+ });
+ document.addEventListener('pointermove',e=>{
+  if(touchDrag?.pointer===e.pointerId){
+   e.preventDefault();touchDrag.x=e.clientX;touchDrag.y=e.clientY;
+   $('entityGhost').style.left=Math.max(8,Math.min(window.innerWidth-220,e.clientX-80))+'px';$('entityGhost').style.top=Math.max(8,e.clientY-70)+'px';
+   const el=document.elementFromPoint(e.clientX,e.clientY);mark(el?.closest?.('[data-drop-zone],[data-assign-person],[data-entity-kind]'));return;
+  }
+  const g=gesture;if(!g||g.pointer!==e.pointerId)return;
+  if(!visible(g.row)){cancel();return}
+  const dx=e.clientX-g.startX,dy=e.clientY-g.startY,ax=Math.abs(dx),ay=Math.abs(dy);
+  if(ax>8||ay>8){g.moved=true;clearHold()}
+  if(g.handle){if(ax>8||ay>8){suppressEntityClick(g.row);gesture=null}return}
+  if(!g.axis){
+   if(ay>=10&&ay>=ax){suppressEntityClick(g.row);gesture=null;paintEntitySwipe(g.row,0,true);closeEntitySwipe();return}
+   if(ax<16||ax<ay*1.5)return;
+   g.axis='x';g.row.setPointerCapture?.(g.pointer);
+   if(openEntitySwipe&&openEntitySwipe!==g.row)closeEntitySwipe();
+  }
+  // Once horizontal, never switch axes midway and leave a translated row behind.
+  e.preventDefault();g.dx=dx;
+  const total=g.base+dx,limit=entitySwipeWidth(g.row,total>=0?'leading':'trailing');
+  paintEntitySwipe(g.row,Math.max(-limit,Math.min(limit,total)),false);
+ },{passive:false});
+ document.addEventListener('pointerup',e=>{
+  if(touchDrag?.pointer===e.pointerId){
+   const g=touchDrag,target=document.elementFromPoint(e.clientX,e.clientY);stopDrag();clearHold();suppressEntityClick(g.row);
+   if(!entityDrop(g,target))toast('Move cancelled');return;
+  }
+  const g=gesture;if(!g||g.pointer!==e.pointerId)return;
+  gesture=null;clearHold();release(g.row,g.pointer);
+  if(!visible(g.row)){paintEntitySwipe(g.row,0,true);closeEntitySwipe();return}
+  if(g.axis!=='x'){
+   if(g.base||g.moved){suppressEntityClick(g.row);paintEntitySwipe(g.row,0,true);closeEntitySwipe()}
+   return;
+  }
+  suppressEntityClick(g.row);
+  const total=g.base+g.dx,side=total>=0?'leading':'trailing',width=entitySwipeWidth(g.row,side);
+  const closing=g.base&&Math.sign(g.base)!==Math.sign(g.dx)&&Math.abs(g.dx)>=32&&Math.sign(total)===Math.sign(g.base);
+  const offset=!closing&&Math.abs(total)>=Math.min(48,width*.4)?Math.sign(total)*width:0;
+  settleEntitySwipe(g.row,offset);
+ });
+ document.addEventListener('pointercancel',e=>{if((gesture&&gesture.pointer===e.pointerId)||(touchDrag&&touchDrag.pointer===e.pointerId))cancel()});
+ document.addEventListener('lostpointercapture',e=>{if((gesture&&gesture.pointer===e.pointerId&&e.target===gesture.row)||(touchDrag&&touchDrag.pointer===e.pointerId&&e.target===touchDrag.handle))cancel()});
+ window.addEventListener('blur',cancel);window.addEventListener('resize',cancel);
+ document.addEventListener('visibilitychange',()=>{if(document.hidden)cancel()});
+ document.addEventListener('scroll',()=>{if(!touchDrag)closeEntitySwipe()},true);
+ document.addEventListener('click',e=>{
+  if(consumeEntityGhostClick(e)){e.preventDefault();e.stopImmediatePropagation();return}
+  const row=entityTarget(e.target),action=e.target.closest?.('[data-swipe-action]');
+  if(action&&row){e.preventDefault();e.stopImmediatePropagation();entitySwipeAction(row.dataset.entityKind,row.dataset.entityId,action.dataset.swipeAction);return}
+  if(openEntitySwipe&&row===openEntitySwipe){e.preventDefault();e.stopImmediatePropagation();closeEntitySwipe();return}
+  if(openEntitySwipe)closeEntitySwipe();
+  const grip=e.target.closest?.('[data-drag-kind]');
+  if(grip){e.preventDefault();e.stopImmediatePropagation();entityOpen(grip.dataset.dragKind,grip.dataset.dragId);return}
+  const menu=e.target.closest?.('[data-entity-menu]');
+  if(menu){e.preventDefault();e.stopImmediatePropagation();entityOpen(menu.dataset.entityMenu,menu.dataset.entityId)}
+ },true);
+ document.addEventListener('contextmenu',e=>{
+  const row=entityTarget(e.target);
+  if(row&&!e.target.closest('input,textarea,select')){e.preventDefault();if(touchDrag||e.target.closest('[data-drag-kind]'))return;cancel();entityOpen(row.dataset.entityKind,row.dataset.entityId)}
+ });
+ document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&(touchDrag||gesture||openEntitySwipe)){e.preventDefault();e.stopImmediatePropagation();cancel()}
+ },true);
+}
+
 function initEntities(){$('entityClose').onclick=entityClose;$('entityShade').onclick=entityClose;$('entityBody').onclick=e=>{const b=e.target.closest('[data-entity-action]');if(b)entityAction(b.dataset.entityAction)};$('presetCustomize').onclick=()=>entityEditPreset($('tripSelect').value);$('presetNew').onclick=()=>entityEditPreset('');$('newKit').onclick=()=>{entityOpen('kit','');$('entityTitle').textContent='New empty kit';entityEditKit('')};$('detailCustomize').onclick=()=>entityOpen('kit',openZone);$('plannerCustomize').onclick=()=>entityOpen('trip',plannerTripId);$('plannerAssignments').onclick=entityEditAssignments;$('hiddenEntities').onclick=e=>{const b=e.target.closest('[data-show-kind]');if(b)entityToggleHidden(b.dataset.showKind,b.dataset.showId)};
  document.addEventListener('keydown',e=>{if($('entityLayer').classList.contains('hidden'))return;if(e.key==='Escape'){e.preventDefault();e.stopImmediatePropagation();entityClose()}if(e.key==='Tab'){const a=[...$('entityLayer').querySelectorAll('button,input,select,textarea,a[href]')].filter(x=>!x.disabled&&x.getClientRects().length),first=a[0],last=a[a.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last?.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first?.focus()}e.stopImmediatePropagation()}},true);initEntityGestures();renderHiddenEntities()}
 function validatedAssignments(raw){if(raw===undefined)return [];if(!Array.isArray(raw)||raw.length>100)throw Error('Invalid bags / people');return raw.map(a=>{if(!a||typeof a.person!=='string'||typeof a.bag!=='string')throw Error('Invalid bag assignment');return {person:entityText(a.person,60)||'Shared',bag:entityText(a.bag,60)||'Day bag'}})}
@@ -61,3 +234,7 @@ function entityEditAssignments(){const p=planCurrent();if(!p)return;entityOpen('
 function departurePresetData(){return {...Object.fromEntries(Object.entries(groups).map(([id,zones])=>[id,{name:({hike:'Quick hike',family:'Family / longer hike',camp:'Camping / outdoor trip',evac:'Evacuation'})[id],zones}])),...(customization.presets||{})}}
 function entitySavePreset(id,name,zones){if(!entityText(name,60))return false;const fresh=!id;id=id||'preset_'+entityId();if(fresh&&Object.keys(customization.presets||{}).length>=30)return false;return entityCommit(()=>{customization.presets={...(customization.presets||{}),[id]:{name:entityText(name,60),zones:[...new Set(zones)].filter(z=>Object.hasOwn(ZONES,z))}}},'Departure checklist saved')}
 function entityEditPreset(id){const preset=departurePresetData()[id]||{name:'',zones:[]};entityOpen('preset',id);$('entityTitle').textContent=id?'Customize departure checklist':'New departure checklist';entityForm(`<label>Checklist name<input id="entityPresetName" required maxlength="60" value="${esc(preset.name)}"></label><p class="hint">Include departure-day gear from these kits:</p>`+orderedZones(true).map(([zone,z])=>`<label class="entity-checkbox"><input type="checkbox" data-preset-zone="${zone}" ${preset.zones.includes(zone)?'checked':''}>${esc(z.name)}</label>`).join(''));$('entityForm').onsubmit=e=>{e.preventDefault();const zones=[...$('entityBody').querySelectorAll('[data-preset-zone]')].filter(el=>el.checked).map(el=>el.dataset.presetZone);if(entitySavePreset(id,$('entityPresetName').value,zones))entityClose()}}
+function entitySwipeTripRow(id,content){
+ const inner=content.replace(/data-entity-kind="trip-item" data-entity-id="[^"]*"/,'');
+ return `<div class="entity-card trip-swipe-row" data-entity-kind="trip-item" data-entity-id="${esc(id)}">${entitySwipeRails('trip-item',id)}<div class="entity-surface">${inner}</div></div>`;
+}

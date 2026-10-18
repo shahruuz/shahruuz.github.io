@@ -1,5 +1,16 @@
 # FieldKit changelog
 
+## v1.22.0 — 2026-10-18
+
+- Replaces competing swipe handlers with one axis-locked controller for gear, kit/trip cards, trip items and missing supplies. Swiping reveals buttons; only tapping an action changes data or opens an editor. No automatic full-swipe actions.
+- Vertical/diagonal scrolling, direction reversals, canceled touches, lost capture, second fingers, tab/background changes and detached rows cleanly reset translated surfaces. One row stays open at a time; outside taps, scrolling and Escape close it.
+- Replaces blanket click delays with suppression of the completing gesture click. Fresh taps and keyboard/assistive actions remain usable immediately. Reorder grips and packing-circle drag keep distinct roles.
+- Quantity, archive, packing and deletion failures restore the prior data; trip packing gains Undo. Packing controls at zero/current stock caps no longer offer ineffective actions. Modal focus tracking avoids hidden controls.
+- AI previews refuse application after owned inventory changes. Existing inventory, on-device keys, reset marker, photos and custom fields are preserved.
+- 114 automated checks, including capture/bubble event dispatch, cancellation paths, explicit swipe actions, save-failure rollback and stale AI preview protection. Physical iPhone/Safari/browser visual verification remains unavailable.
+- Rollback: fieldkit-before-v1.22.0 (98b6e09).
+
+
 ## v1.21.1 — 2026-10-18
 
 - Blocks fuel-canister drag/drop into carried or custom kits. Fuel remains in the shared outdoor-storage workflow; quantities and storage notes are preserved.

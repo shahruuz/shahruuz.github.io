@@ -1,3 +1,11 @@
+# v1.22.0 verification — 2026-10-18
+
+- 114 automated regression checks pass. New coverage dispatches capture listeners before bubbling listeners and honors cancellation. Cases include diagonal/reversed/short/edge swipes, scroll and pointer cancellation, capture loss, multiple pointers, detached rows, one-open-row behavior, outside/scroll/Escape closure, long-hold cancellation, synthetic vs fresh/keyboard clicks, explicit actions, canceled deletion and no-op stock controls.
+- Quantity, archive, packing and deletion quota failures preserve both in-memory and persisted records. Trip pack Undo and stale AI preview rejection are verified.
+- All stock-changing swipe actions require a button tap. No full swipe auto-applies changes.
+- Checks are disposable JavaScript/DOM fixtures; no physical iPhone/Safari gesture or visual browser test is claimed. Published files are fetched and checked after deployment.
+- Rollback: `fieldkit-before-v1.22.0` at `98b6e0974741aee14a10459b0efeba31f5b62312`.
+
 # v1.21.1 verification — 2026-10-18
 
 - 97 automated checks pass. Added fuel-canister storage-drop guard; blocked drops preserve quantities, storage spot and item metadata.

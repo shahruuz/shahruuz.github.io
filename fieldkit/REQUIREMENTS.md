@@ -1,6 +1,6 @@
 # FieldKit requirements and decisions
 
-Updated 2026-10-18 (America/Denver). Current implementation: v1.21.1. Trip planner contract and full Gemini prompt/schema: PLANNER_SPEC.md.
+Updated 2026-10-18 (America/Denver). Current implementation: v1.22.0. Trip planner contract and full Gemini prompt/schema: PLANNER_SPEC.md.
 
 Each decision is marked **User** (Shahrouz decided or stated it) or **Proposal** (an assistant suggestion that is not approved until the user confirms it).
 
@@ -67,3 +67,7 @@ User: a simple introduction at the beginning showing FieldKit capabilities in 2â
 User requested swiping, long-hold drag/drop and customization across gear, kits, trips and fields, with serious conflicts paused. Implemented entity-row/card interactions, explicit grips and menus, editable domain data, custom gear fields, presets and bag/person targets. Native input/dropdown/switch/navigation gestures are deliberately unchanged to avoid interfering with typing, scrolling or system navigation. IDs, owned-stock caps, acquisition confirmation, emergency protection and fuel storage remain enforced. Ended-trip metadata can be customized; historical packing remains read-only. Duplicate creates an editable active plan with empty packing and current stock caps. No automatic destructive deletion is introduced.
 
 Release guard v1.21.1: new fuel drag/drop into carried/custom kits is blocked. Shared outdoor storage and explicit field editing remain available.
+
+## v1.22.0 â€” swipe repair
+
+User reported flawed swiping and requested fixes plus a related improvement audit. Current behavior supersedes prior direct swipe actions: a swipe reveals explicit buttons and never changes data alone. One controller handles rows/cards, preserves native vertical scrolling/pinch zoom and browser edges, cancels cleanly and suppresses only the completing gesture click. Packing drag and hold-grip reordering remain distinct. Stock/archive/packing saves are atomic, trip packing supports Undo, and stale AI inventory previews cannot apply. Physical Safari gesture testing is not claimed.
