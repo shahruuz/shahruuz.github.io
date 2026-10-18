@@ -1,8 +1,6 @@
-# FieldKit v1.13.1 verification
+# FieldKit v1.14.0 verification
 
-- 44 regression checks pass, including gallery/list preference isolation and illustrated kit actions.
-- App/marketing/service-worker syntax and static HTML, asset references and CSS structure checked.
-- Existing inventory keys and packing reset marker unchanged.
-- Gallery preference uses fieldkit_display_v1, independently of inventory.
-- Prior snapshot: fieldkit-v1.12.1-stable.
-- Published visual and persistence checks follow deployment. Physical iPhone/Safari and hardware integration remain unverified.
+- node fieldkit/tests/verify.cjs: 44 of 44 checks pass (checklist default and List preference test updated).
+- Local browser render at 393 × 852 CSS px with isolated sample data: checklist renders, no horizontal overflow, no page errors.
+- Inventory keys, quantities, order, Empty/Archive rules and packing-reset marker unchanged.
+- NOT yet verified: published URL (GitHub write access not connected; the workspace cannot reach github.io), physical iPhone/Safari, installed PWA, offline use, camera.

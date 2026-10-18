@@ -1,5 +1,14 @@
 # FieldKit changelog
 
+## v1.14.0 — 2026-10-18
+
+- Inventory now opens as an iPhone Notes-style checklist, replacing the rejected gallery as the default. Each kit's items are grouped as Packed in bag, Need verify and In storage / day-of, with Empty listed in the same screen.
+- Tap a status circle to move gear (Packed, Need verify, Empty) through the existing accessible move menu. Tap − and + to change quantity.
+- Kept the List view as an option; the choice is saved separately from inventory. Saved gallery preferences now show the checklist.
+- Photos are hidden in the checklist view but remain attached and visible in List view and item details. (Known tradeoff, pending user review.)
+- Inventory data, keys, ordering, Empty/Archive rules, packing-reset marker and storage unchanged. Regression checks: 44 of 44 pass.
+- Rollback: fieldkit-v1.13.1-stable, ce8f776a9b42116c28bb2000052bfa6b43238590.
+
 ## v1.13.1 — 2026-10-17
 
 - Empty Archive placeholder spans the gallery width and has a centered, rounded layout.
