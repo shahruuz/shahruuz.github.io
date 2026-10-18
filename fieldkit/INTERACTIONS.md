@@ -1,4 +1,4 @@
-# FieldKit v1.21.0 — touch and customization
+# FieldKit v1.21.1 — touch and customization
 
 | Surface | Swipe | Hold / drag | Tap controls |
 | --- | --- | --- | --- |
@@ -17,8 +17,8 @@
 - Hidden cards can be restored under More → Hidden kits & trips. Hidden active trips still retain packing and conflict warnings.
 - Ended-trip metadata remains editable; packing history remains read-only. Duplicate to reuse a trip. Copies reset packing and cap gear to present stock, moving shortfalls to missing.
 
-New reorder/customization operations have Undo and roll back on save failure. Canceled drags make no changes. Dropping gear on a kit changes its storage assignment without changing stock, photos or notes. Dedicated emergency stock cannot be dragged out casually; deliberate storage edits remain available. Fuel cannot be assigned to a carried bag. Missing gear never becomes owned stock through dragging.
+New reorder/customization operations have Undo and roll back on save failure. Canceled drags make no changes. Dropping gear on a kit changes its storage assignment without changing stock, photos or notes. Dedicated emergency stock cannot be dragged out casually; deliberate storage edits remain available. Fuel cannot be assigned to a carried bag or dragged into carried/custom storage kits; the shared outdoor-storage workflow remains. Missing gear never becomes owned stock through dragging.
 
 All changes remain on the same device/origin. No new accounts, paid services, analytics or automatic uploads were added. Existing Gemini consent and free-key controls remain in place.
 
-Verification: 96 automated checks including simulated gesture events; static and rendered HTML checked for nested controls. No physical iPhone/Safari gesture or visual browser test is claimed. Rollback source: fieldkit-before-v1.21.0, commit 8c238ceceead7f7563424f60d47c8caff11cdbac.
+Verification: 97 automated checks including simulated gesture events; static and rendered HTML checked for nested controls. No physical iPhone/Safari gesture or visual browser test is claimed. Rollback source: fieldkit-before-v1.21.1, commit 8c238ceceead7f7563424f60d47c8caff11cdbac.

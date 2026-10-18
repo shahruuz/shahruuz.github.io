@@ -1,5 +1,11 @@
 # FieldKit changelog
 
+## v1.21.1 — 2026-10-18
+
+- Blocks fuel-canister drag/drop into carried or custom kits. Fuel remains in the shared outdoor-storage workflow; quantities and storage notes are preserved.
+- 97 regression checks pass, including fuel storage-drop prevention.
+
+
 ## v1.21.0 — 2026-10-18
 
 - Swipe kit/trip cards for customization or actions. Hold any gear/card row for actions; hold the visible ⠿ grip then drag to reorder. Grips also open tap/keyboard move controls. Trip item swipes pack/unpack or open actions; missing-list swipes open acquisition or edit actions.

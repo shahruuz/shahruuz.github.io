@@ -1,3 +1,8 @@
+# v1.21.1 verification — 2026-10-18
+
+- 97 automated checks pass. Added fuel-canister storage-drop guard; blocked drops preserve quantities, storage spot and item metadata.
+- Previous v1.21.0 gesture/customization validation and physical-device limits below still apply.
+
 # v1.21.0 verification — 2026-10-18
 
 - 96 automated regression checks pass. New cases cover empty custom-kit creation, metadata/fields/order in backups, hide/restore without gear removal, stock-preserving reordering and Undo, emergency protection, trip metadata, bag/person assignments and weights, missing-list edits through optimization, stock-capped trip copies, custom departure presets, quota rollback, hold-before-drag, canceled pointer gestures and native input gestures.
