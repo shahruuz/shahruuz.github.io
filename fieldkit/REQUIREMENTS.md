@@ -1,6 +1,6 @@
 # FieldKit requirements and decisions
 
-Updated 2026-10-18 (America/Denver). Release baseline: v1.13.1 (main ce8f776). Published: v1.15.0 (fcb1a7b). In progress: v1.16.0 Scan & pack.
+Updated 2026-10-18 (America/Denver). Current implementation: v1.19.0. Trip planner contract and full Gemini prompt/schema: PLANNER_SPEC.md.
 
 Each decision is marked **User** (Shahrouz decided or stated it) or **Proposal** (an assistant suggestion that is not approved until the user confirms it).
 
@@ -52,3 +52,8 @@ See TESTING.md for observed results and limits. Desktop browser emulation is not
 ## Trip planner — 2026-10-18
 - **User:** create kits from a description (example: 3 day San Diego trip for 3 people), recommend packs and help pack them.
 - **Implementation:** free on-device trip templates, editable assumptions and item quantities; personal kits plus shared day/camp kits. New records are unconfirmed suggestions, To pack, separate from existing inventory. No emergency-kit borrowing. Custom kits use the existing inventory payload and backup/recovery workflow.
+
+
+## v1.19.0 — interview decisions implemented
+
+User decisions: owned-only trip kits, capped quantities and missing list; partial packing and photo preview; explicit notes/photo consent; edit-preserving optimization; acquisition flow; per-person/bag weights; shared stock with conflict warnings; shopping-list sharing; reviewed consumption on trip completion. Routine implementation choices and exact prompt/schema are recorded in PLANNER_SPEC.md. Existing origin and data/reset keys are unchanged.

@@ -1,5 +1,15 @@
 # FieldKit changelog
 
+## v1.19.0 — 2026-10-18
+
+- Plan a trip now references actual owned gear, with capped quantities and a separate acquisition/shopping list. It never creates unowned inventory. Local planning works without a key or connection.
+- Gemini optimization with explicit data-sharing consent, notes/photos context, selected past-trip context, structured output validation, edit protection and preview before applying. Fixed free-tier Flash allowlist; quota failures keep the local kit.
+- Trip-specific full/partial packing, amber progress, per-person/bag assignments and known-weight totals; cross-trip gear warnings. Snap to pack previews uncertain matches and uses non-additive counts.
+- Acquired quantities refill stock and the trip; share/copy missing supplies. Finish trip reviews consumption, resets packing and keeps history. JSON backups preserve plans.
+- Existing inventory IDs, photos, locations, quantities, storage key, reset marker and legacy status compatibility preserved. No “Need verify” UI state.
+- Rollback source: fieldkit-before-v1.19.0 (0bf7e82).
+
+
 ## v1.18.0 — 2026-10-18
 
 - Kits → Plan a trip: describe destination, days and travelers; review local recommendations for city, beach, hiking, camping or cold trips. Edit trip details, kit names, quantities and selected items before creation.
@@ -183,3 +193,4 @@ Validation inherited from the stable baseline: 16 behavior checks passed; GitHub
 
 Stable snapshot branch: fieldkit-v1.7.0-stable.
 Future fixes use v1.7.x. The next feature release is v1.8.0.
+

@@ -1,0 +1,95 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "name",
+    "items",
+    "missing",
+    "assumptions"
+  ],
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "inventoryId",
+          "quantity",
+          "reason",
+          "person",
+          "bag",
+          "consumable",
+          "departureDay"
+        ],
+        "properties": {
+          "inventoryId": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 999
+          },
+          "reason": {
+            "type": "string"
+          },
+          "person": {
+            "type": "string"
+          },
+          "bag": {
+            "type": "string"
+          },
+          "consumable": {
+            "type": "boolean"
+          },
+          "departureDay": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "missing": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "quantity",
+          "reason",
+          "category",
+          "inventoryId"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 999
+          },
+          "reason": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "inventoryId": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "assumptions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}
