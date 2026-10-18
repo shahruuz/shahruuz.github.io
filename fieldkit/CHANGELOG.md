@@ -1,5 +1,12 @@
 # FieldKit changelog
 
+## v1.16.3 — 2026-10-18
+
+- Smart scan now shows Google's own reason when a key or request is refused (with the key blanked out), instead of a generic "did not accept" message.
+- New **Test key** button (Scan screen and More → Smart scan); saving a key tests it automatically.
+- If Google's model list is blocked for a key, Smart scan still tries the current free flash models directly (gemini-3.8-flash, 3.5-flash, 2.5-flash, flash-latest) and remembers the one that works.
+- 60 regression checks pass.
+
 ## v1.16.2 — 2026-10-18
 
 - Fix: Smart scan rejected valid Google keys in newer formats (for example keys containing dots). The key check now accepts any complete key and strips spaces, line breaks and quotes picked up while copying.

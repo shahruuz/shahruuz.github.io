@@ -161,27 +161,55 @@ function scanPickModel(models) {
   const stable = n => /preview|exp/i.test(n) ? 1 : 0;
   return ok.sort((a, b) => lite(a) - lite(b) || stable(a) - stable(b) || ver(b) - ver(a) || a.length - b.length)[0] || 'gemini-2.5-flash';
 }
-async function scanGeminiModel(key, refresh) {
-  if (!refresh) { try { const m = localStorage.getItem(SCAN_MODEL_STORE); if (m) return m } catch {} }
-  const r = await fetch('https://generativelanguage.googleapis.com/v1beta/models?pageSize=200', { headers: { 'x-goog-api-key': key } });
-  if (!r.ok) throw Error(r.status === 400 || r.status === 403 ? 'Google did not accept the saved key' : 'Google model list failed (' + r.status + ')');
-  const model = scanPickModel((await r.json()).models);
-  try { localStorage.setItem(SCAN_MODEL_STORE, model) } catch {}
-  return model;
+const SCAN_FALLBACK_MODELS = ['gemini-3.8-flash', 'gemini-3.5-flash', 'gemini-2.5-flash', 'gemini-flash-latest'];
+const SCAN_API = 'https://generativelanguage.googleapis.com/v1beta/';
+// Google's own explanation, with the key removed, so the person can see why a call failed.
+async function scanGoogleError(r, key) {
+  let msg = '', code = '';
+  try { const j = await r.json(); msg = j?.error?.message || ''; code = j?.error?.status || '' } catch {}
+  msg = String(msg).split(key || '\u0000').join('[key]').replace(/\s+/g, ' ').trim().slice(0, 220);
+  return 'Google said ' + r.status + (code ? ' ' + code : '') + (msg ? ': ' + msg : '');
+}
+async function scanGeminiModels(key) {
+  let listed = null;
+  try { const m = localStorage.getItem(SCAN_MODEL_STORE); if (m) listed = m } catch {}
+  if (!listed) {
+    try {
+      const r = await fetch(SCAN_API + 'models?pageSize=200', { headers: { 'x-goog-api-key': key } });
+      if (r.ok) { const j = await r.json(); if ((j.models || []).length) listed = scanPickModel(j.models) }
+    } catch {}
+  }
+  return [...new Set([listed, ...SCAN_FALLBACK_MODELS].filter(Boolean))];
+}
+async function scanGeminiCall(key, body) {
+  let lastErr = null;
+  for (const model of await scanGeminiModels(key)) {
+    const r = await fetch(SCAN_API + 'models/' + encodeURIComponent(model) + ':generateContent', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key }, body });
+    if (r.ok) { try { localStorage.setItem(SCAN_MODEL_STORE, model) } catch {} return { json: await r.json(), model } }
+    const msg = await scanGoogleError(r, key);
+    if (r.status === 429) throw Error('Free Gemini limit reached for now (' + msg + ')');
+    if (r.status === 404 || (r.status === 400 && /model|not found|not supported/i.test(msg) && !/api.?key|credential|auth/i.test(msg))) { lastErr = msg; try { localStorage.removeItem(SCAN_MODEL_STORE) } catch {} continue }
+    throw Error(msg);
+  }
+  throw Error(lastErr || 'No Gemini model available for this key');
 }
 async function scanGemini(dataUrl, w, h, key) {
   const body = JSON.stringify({ contents: [{ parts: [{ text: scanPrompt() }, { inline_data: { mime_type: 'image/jpeg', data: dataUrl.split(',')[1] } }] }],
     generationConfig: { response_mime_type: 'application/json', temperature: 0.2 } });
-  for (let attempt = 0; attempt < 2; attempt++) {
-    const model = await scanGeminiModel(key, attempt > 0);
-    const r = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(model) + ':generateContent', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key }, body });
-    if (r.status === 404 && attempt === 0) continue;
-    if (r.status === 429) throw Error('Free Gemini limit reached for now');
-    if (r.status === 400 || r.status === 403) { let msg = ''; try { msg = (await r.json())?.error?.message || '' } catch {} throw Error(/api key/i.test(msg) ? 'Google did not accept the saved key' : 'Gemini refused the photo (' + r.status + ')') }
-    if (!r.ok) throw Error('Gemini error ' + r.status);
-    return scanParseGemini(await r.json(), w, h);
+  return scanParseGemini((await scanGeminiCall(key, body)).json, w, h);
+}
+async function scanTestKey(statusEl) {
+  const key = scanGetKey();
+  if (!key) { statusEl.textContent = 'Save a key first.'; return false }
+  statusEl.textContent = 'Testing the key with Google…';
+  try {
+    const { model } = await scanGeminiCall(key, JSON.stringify({ contents: [{ parts: [{ text: 'Reply with the single word OK.' }] }] }));
+    statusEl.textContent = '✓ Key works (' + model + '). Smart scan is ready.';
+    return true;
+  } catch (e) {
+    statusEl.textContent = '✗ ' + (e.message || 'Could not reach Google') + (e instanceof TypeError ? ' — check the internet connection.' : '');
+    return false;
   }
-  throw Error('No Gemini model available for this key');
 }
 
 /* ---------- Built-in engine (on device) ---------- */
@@ -192,8 +220,8 @@ async function scanLoadCoco(onStatus) {
   if (scanCoco) return scanCoco;
   if (!scanCocoLoading) scanCocoLoading = (async () => {
     onStatus?.('Getting the built-in item finder ready (first time only, about 18 MB)…');
-    if (!window.tf) await scanLoadScript('vendor/tf.min.js?v=1.16.2');
-    if (!window.cocoSsd) await scanLoadScript('vendor/coco-ssd.min.js?v=1.16.2');
+    if (!window.tf) await scanLoadScript('vendor/tf.min.js?v=1.16.3');
+    if (!window.cocoSsd) await scanLoadScript('vendor/coco-ssd.min.js?v=1.16.3');
     scanCoco = await window.cocoSsd.load({ base: 'mobilenet_v2', modelUrl: 'vendor/coco-ssd/model.json' });
     return scanCoco;
   })().catch(e => { scanCocoLoading = null; throw e });
@@ -433,15 +461,16 @@ function initScan() {
     e.preventDefault();
     const err = scanSaveKey($('geminiKey').value);
     if (err) { $('geminiKeyStatus').textContent = err; return }
-    $('geminiKey').value = ''; keyStatus(); toast('Smart scan is on');
+    $('geminiKey').value = ''; keyStatus(); scanTestKey($('geminiKeyStatus'));
   };
+  for (const [btn, out] of [['geminiKeyTest', 'geminiKeyStatus'], ['scanKeyTest', 'scanKeyStatus']]) { const b = $(btn); if (b) b.onclick = () => scanTestKey($(out)) }
   $('scanKeyToggle').onclick = () => { const f = $('scanKeyForm'); f.classList.toggle('hidden'); if (!f.classList.contains('hidden')) $('scanKeyInput').focus() };
   $('scanKeyForm').onsubmit = e => {
     e.preventDefault();
     const err = scanSaveKey($('scanKeyInput').value);
     $('scanKeyStatus').textContent = err;
     if (err) return;
-    $('scanKeyInput').value = ''; $('scanKeyForm').classList.add('hidden'); scanKeyUI(); toast('Smart scan is on');
+    $('scanKeyInput').value = ''; scanKeyUI(); scanTestKey($('scanKeyStatus'));
   };
   $('geminiKeyRemove').onclick = () => { try { localStorage.removeItem(SCAN_KEY_STORE); localStorage.removeItem(SCAN_MODEL_STORE) } catch {} keyStatus(); toast('Smart scan key removed') };
   keyStatus();
