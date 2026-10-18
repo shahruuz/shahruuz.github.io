@@ -1,5 +1,17 @@
 # FieldKit changelog
 
+## v1.21.0 — 2026-10-18
+
+- Swipe kit/trip cards for customization or actions. Hold any gear/card row for actions; hold the visible ⠿ grip then drag to reorder. Grips also open tap/keyboard move controls. Trip item swipes pack/unpack or open actions; missing-list swipes open acquisition or edit actions.
+- Drag owned gear onto a kit/storage destination. Drag trip items onto named person/bag groups; totals update. Pointer cancellation and native edge navigation preserve data. Dedicated emergency stock cannot be moved out by a casual drag; fuel stays in outdoor storage.
+- Customize kit name, emoji, color, subtitle, description and protection. Create empty kits; hide/show kits and trips without removing gear or packing. Customize departure checklist names and included kits; add presets.
+- Edit trip name, icon, destination, days, people, style, dates and context; duplicate plans with packing reset and quantities capped to current stock. Edit missing-item names/counts/reasons/types, and preserve these edits through AI optimization.
+- Gear supports custom categories and up to 20 Label: value fields, included in search, JSON backups and CSV. Existing photo, notes, bin/shelf, quantities and grams remain editable.
+- Customization, order and assignments survive reload/cross-tab updates and backup/import. New customization operations support Undo and roll back on save failure. No stock/reset migration or hosting change.
+- Deliberately paused: global swiping/dragging on text fields, switches, dropdown options and navigation controls, which would conflict with typing, scrolling and browser navigation. Native controls retain their normal gestures.
+- Rollback: fieldkit-before-v1.21.0 (8c238ce).
+
+
 ## v1.20.0 — 2026-10-18
 
 - Three-tap visual introduction on first opening: count and locate gear, plan an owned-stock trip kit with optional Gemini, then pack with checkmarks or confirmed photo matches. Examples are clearly labeled and never enter inventory.

@@ -1,3 +1,11 @@
+# v1.21.0 verification — 2026-10-18
+
+- 96 automated regression checks pass. New cases cover empty custom-kit creation, metadata/fields/order in backups, hide/restore without gear removal, stock-preserving reordering and Undo, emergency protection, trip metadata, bag/person assignments and weights, missing-list edits through optimization, stock-capped trip copies, custom departure presets, quota rollback, hold-before-drag, canceled pointer gestures and native input gestures.
+- Static markup checked for nested forms/buttons; JavaScript syntax checks pass.
+- Gesture event paths are simulated in disposable fixtures. Browser visual layout, iPhone Safari hardware gestures, camera capture and live Gemini are not verified in this session.
+- Paused by design: global gestures on fields, dropdown options, switches and navigation; they conflict with native editing/scrolling/system gestures.
+- Rollback: `fieldkit-before-v1.21.0` at `8c238ceceead7f7563424f60d47c8caff11cdbac`.
+
 # v1.20.0 verification — 2026-10-18
 
 - 82 automated regression checks pass. Added first-open intro, exactly three Next taps, preference persistence, replay/Back/Skip, inventory isolation, recovery-mode priority and preference-storage-failure coverage.

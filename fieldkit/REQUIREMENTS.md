@@ -1,6 +1,6 @@
 # FieldKit requirements and decisions
 
-Updated 2026-10-18 (America/Denver). Current implementation: v1.20.0. Trip planner contract and full Gemini prompt/schema: PLANNER_SPEC.md.
+Updated 2026-10-18 (America/Denver). Current implementation: v1.21.0. Trip planner contract and full Gemini prompt/schema: PLANNER_SPEC.md.
 
 Each decision is marked **User** (Shahrouz decided or stated it) or **Proposal** (an assistant suggestion that is not approved until the user confirms it).
 
@@ -61,3 +61,7 @@ User decisions: owned-only trip kits, capped quantities and missing list; partia
 ## v1.20.0 — three-tap introduction
 
 User: a simple introduction at the beginning showing FieldKit capabilities in 2–3 clicks. Implemented: three visual pages, Next / Next / Start using FieldKit; once per device, Skip and Back, replay from More. Independent intro preference; no inventory changes or new AI/network calls.
+
+## v1.21.0 — touch and customization
+
+User requested swiping, long-hold drag/drop and customization across gear, kits, trips and fields, with serious conflicts paused. Implemented entity-row/card interactions, explicit grips and menus, editable domain data, custom gear fields, presets and bag/person targets. Native input/dropdown/switch/navigation gestures are deliberately unchanged to avoid interfering with typing, scrolling or system navigation. IDs, owned-stock caps, acquisition confirmation, emergency protection and fuel storage remain enforced. Ended-trip metadata can be customized; historical packing remains read-only. Duplicate creates an editable active plan with empty packing and current stock caps. No automatic destructive deletion is introduced.
