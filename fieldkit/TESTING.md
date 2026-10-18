@@ -1,10 +1,10 @@
 # v1.23.0 verification — 2026-10-18
 
-- 114 automated regression checks pass. New coverage dispatches capture listeners before bubbling listeners and honors cancellation. Cases include diagonal/reversed/short/edge swipes, scroll and pointer cancellation, capture loss, multiple pointers, detached rows, one-open-row behavior, outside/scroll/Escape closure, long-hold cancellation, synthetic vs fresh/keyboard clicks, explicit actions, canceled deletion and no-op stock controls.
+- 115 automated regression checks pass. New coverage dispatches capture listeners before bubbling listeners and honors cancellation. Cases include diagonal/reversed/short/edge swipes, scroll and pointer cancellation, capture loss, multiple pointers, detached rows, one-open-row behavior, outside/scroll/Escape closure, long-hold cancellation, synthetic vs fresh/keyboard clicks, explicit actions, canceled deletion and no-op stock controls.
 - Quantity, archive, packing and deletion quota failures preserve both in-memory and persisted records. Trip pack Undo and stale AI preview rejection are verified.
 - All stock-changing swipe actions require a button tap. No full swipe auto-applies changes.
 - Checks are disposable JavaScript/DOM fixtures; no physical iPhone/Safari gesture or visual browser test is claimed. Published files are fetched and checked after deployment.
-- Rollback: `fieldkit-before-v1.23.0` at `98b6e0974741aee14a10459b0efeba31f5b62312`.
+- Rollback: `fieldkit-before-v1.23.0` at `0a1e75c246d0b59274cb29b4c523730e5af47396`.
 
 # v1.21.1 verification — 2026-10-18
 
@@ -44,3 +44,5 @@ Pre-deployment (local copy, isolated headless Chromium at 393 × 852, nonprivate
 
 Not verified: a real Google key against the live Gemini API (requires the owner's free key), real phone camera photos, recognition speed on a physical iPhone, installed home-screen app, offline use.
 
+
+- Drag preview checks cover before/after midpoint selection, self-target rejection, read-only preview, exact placement and removal of gap styling after release.

@@ -20,4 +20,4 @@ Kit names, emojis, colors, subtitles, descriptions and protection are customizab
 
 Quantity, archive and packing operations support Undo. Save failures restore prior data. Permanent deletion still requires confirmation and has no Undo; a failed deletion save retains the archived record. AI previews cannot apply if owned stock changed while they were being prepared or reviewed.
 
-No storage/reset key migration, paid services, accounts, analytics or automatic uploads were added. Validation uses disposable fixture records and realistic pointer sequences. Physical iPhone/Safari/browser visual testing is not claimed. Rollback: fieldkit-before-v1.23.0 at 98b6e0974741aee14a10459b0efeba31f5b62312.
+No storage/reset key migration, paid services, accounts, analytics or automatic uploads were added. Validation uses disposable fixture records and realistic pointer sequences. Physical iPhone/Safari/browser visual testing is not claimed. Rollback: fieldkit-before-v1.23.0 at 0a1e75c246d0b59274cb29b4c523730e5af47396.
