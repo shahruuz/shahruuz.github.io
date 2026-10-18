@@ -220,8 +220,8 @@ async function scanLoadCoco(onStatus) {
   if (scanCoco) return scanCoco;
   if (!scanCocoLoading) scanCocoLoading = (async () => {
     onStatus?.('Getting the built-in item finder ready (first time only, about 18 MB)…');
-    if (!window.tf) await scanLoadScript('vendor/tf.min.js?v=1.16.3');
-    if (!window.cocoSsd) await scanLoadScript('vendor/coco-ssd.min.js?v=1.16.3');
+    if (!window.tf) await scanLoadScript('vendor/tf.min.js?v=1.17.0');
+    if (!window.cocoSsd) await scanLoadScript('vendor/coco-ssd.min.js?v=1.17.0');
     scanCoco = await window.cocoSsd.load({ base: 'mobilenet_v2', modelUrl: 'vendor/coco-ssd/model.json' });
     return scanCoco;
   })().catch(e => { scanCocoLoading = null; throw e });
@@ -404,6 +404,7 @@ function scanRender(fresh) {
   const floor = st.pieces.map((p, i) => [p, i]).filter(([p]) => !p.inBag), bag = st.pieces.map((p, i) => [p, i]).filter(([p]) => p.inBag);
   $('scanFloor').innerHTML = floor.length ? floor.map(([p, i]) => scanPieceHtml(p, i)).join('') : `<div class="scan-floor-empty">${st.pieces.length ? '🎉 Floor is clear — everything is in the bag.' : 'Nothing found. Tap the photo on each item to add it.'}</div>`;
   $('scanFloorCount').textContent = floor.length;
+  $('scanAllOut').classList.toggle('hidden', !bag.length); $('scanAllIn').classList.toggle('hidden', !floor.length);
   $('scanNote').textContent = st.note || '';
   $('scanNote').classList.toggle('hidden', !st.note);
   const total = st.pieces.length, inBag = bag.length, pct = total ? Math.round(inBag / total * 100) : 0;
@@ -431,6 +432,7 @@ function initScan() {
   for (const id of ['scanCamera', 'scanLibrary']) $(id).onchange = e => { const f = e.target.files?.[0]; e.target.value = ''; scanFile(f) };
   $('scanRetake').onclick = () => { if (scanState && (!scanState.pieces.length || confirm('Start over with a new photo?'))) { scanState.pieces = []; scanSetStep('start') } };
   $('scanAllIn').onclick = () => { if (!scanState) return; scanState.pieces.forEach(p => p.inBag = true); scanRender() };
+  $('scanAllOut').onclick = () => { if (!scanState) return; scanState.pieces.forEach(p => p.inBag = false); scanRender() };
   $('scanSave').onclick = scanSave;
   $('scanPhoto').onclick = e => {
     if (!scanState?.w) return;

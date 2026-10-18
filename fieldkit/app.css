@@ -1,4 +1,4 @@
-/* FieldKit v1.16.3 — iPhone Notes-style app theme. Single application stylesheet. */
+/* FieldKit v1.17.0 — iPhone Notes-style app theme. Single application stylesheet. */
 :root{
   color-scheme:light;
   font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",system-ui,sans-serif;
@@ -405,3 +405,27 @@ textarea{resize:vertical;min-height:96px}
 .scan-key-form{text-align:left;padding:12px;border-radius:12px;background:var(--bg)}.scan-key-form input{background-color:var(--card)}.scan-key-form .inline{margin-top:10px}.smart-scan .inline{margin-top:10px}
 @media(min-width:560px){.scan-floor{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media print{.scan-layer,.scan-hero,.compose.cam{display:none!important}}
+
+/* Select mode (multiple items) */
+.text-btn{min-height:44px;padding:0 8px;border:0;background:none;color:var(--tint);font-size:17px;font-weight:500}
+.sheet-nav{display:flex;align-items:center;justify-content:space-between}
+.select-dot{display:grid;place-items:center;flex:0 0 44px;width:44px;height:48px;padding:0;border:0;background:none}
+.select-dot .dot{border-color:#b4b4b9}
+.select-dot[aria-pressed=true] .dot{background:var(--ink);border-color:var(--ink)}
+.select-dot[aria-pressed=true] .dot:after{content:"";position:absolute;left:7.5px;top:3.5px;width:5px;height:10px;border:solid #fff;border-width:0 2.4px 2.4px 0;transform:rotate(45deg)}
+.is-selected .swipe-surface{background:#ececf2}
+.select-mode .row-stepper,.select-mode .row-actions,.select-mode .row-photo,.select-mode .compose,.select-mode .scan-hero{display:none}
+.select-mode .footer{padding-bottom:calc(150px + env(safe-area-inset-bottom))}
+.select-mode .sheet{padding-bottom:calc(150px + env(safe-area-inset-bottom))}
+.select-mode .toast{bottom:calc(118px + env(safe-area-inset-bottom))}
+.bulk-bar{position:fixed;left:0;right:0;bottom:0;z-index:57;padding:4px max(12px,calc((100vw - 680px)/2)) calc(8px + env(safe-area-inset-bottom));background:rgba(249,249,249,.97);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border-top:.5px solid #c8c8cc;box-shadow:0 -6px 24px rgba(0,0,0,.06)}
+.bulk-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.bulk-top span{font-size:15px;font-weight:600;font-variant-numeric:tabular-nums}
+.bulk-actions{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:4px 0 2px}
+.bulk-actions::-webkit-scrollbar{display:none}
+.bulk-btn{flex:none;min-height:42px;padding:0 14px;border:0;border-radius:21px;background:var(--card);color:var(--ink);font-size:15px;font-weight:500;box-shadow:0 .5px 1px rgba(0,0,0,.12)}
+.bulk-btn:disabled,.bulk-move:disabled{opacity:.4}
+.bulk-btn.danger{color:var(--red)}
+.bulk-actions .bulk-move{flex:none;width:auto;min-height:42px!important;padding:0 32px 0 14px;border-radius:21px;background-color:var(--card);font-size:15px;box-shadow:0 .5px 1px rgba(0,0,0,.12)}
+.scan-all{display:flex;gap:4px}
+@media print{.bulk-bar,.text-btn{display:none!important}}

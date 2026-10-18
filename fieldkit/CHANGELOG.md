@@ -1,5 +1,13 @@
 # FieldKit changelog
 
+## v1.17.0 — 2026-10-18
+
+- **Select mode** on Inventory and inside each kit: tap **Select**, tick several items (or **Select all** for what is on screen), then use the bottom bar: ✓ Pack, ○ To pack, +1, −1, Empty, Move to another kit, or Archive. One Undo reverses the whole batch.
+- In **Archive**, Select mode offers Restore and Delete forever for several items at once; permanent deletion still asks for confirmation and only removes archived items.
+- Bulk −1 stops at zero (it never archives); bulk Empty and To pack keep remembered counts; saved "verify" items keep their stored status.
+- Scan & pack: **Unpack all** next to Pack all.
+- 64 regression checks pass (4 new for Select mode).
+
 ## v1.16.3 — 2026-10-18
 
 - Smart scan now shows Google's own reason when a key or request is refused (with the key blanked out), instead of a generic "did not accept" message.
