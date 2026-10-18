@@ -1,6 +1,6 @@
 # FieldKit requirements and decisions
 
-Updated 2026-10-18 (America/Denver). Current implementation: v1.19.0. Trip planner contract and full Gemini prompt/schema: PLANNER_SPEC.md.
+Updated 2026-10-18 (America/Denver). Current implementation: v1.20.0. Trip planner contract and full Gemini prompt/schema: PLANNER_SPEC.md.
 
 Each decision is marked **User** (Shahrouz decided or stated it) or **Proposal** (an assistant suggestion that is not approved until the user confirms it).
 
@@ -57,3 +57,7 @@ See TESTING.md for observed results and limits. Desktop browser emulation is not
 ## v1.19.0 — interview decisions implemented
 
 User decisions: owned-only trip kits, capped quantities and missing list; partial packing and photo preview; explicit notes/photo consent; edit-preserving optimization; acquisition flow; per-person/bag weights; shared stock with conflict warnings; shopping-list sharing; reviewed consumption on trip completion. Routine implementation choices and exact prompt/schema are recorded in PLANNER_SPEC.md. Existing origin and data/reset keys are unchanged.
+
+## v1.20.0 — three-tap introduction
+
+User: a simple introduction at the beginning showing FieldKit capabilities in 2–3 clicks. Implemented: three visual pages, Next / Next / Start using FieldKit; once per device, Skip and Back, replay from More. Independent intro preference; no inventory changes or new AI/network calls.

@@ -1,3 +1,10 @@
+# v1.20.0 verification — 2026-10-18
+
+- 82 automated regression checks pass. Added first-open intro, exactly three Next taps, preference persistence, replay/Back/Skip, inventory isolation, recovery-mode priority and preference-storage-failure coverage.
+- No additional requests, AI calls, sample records, inventory resets or migrations from the introduction.
+- Visual browser / physical iPhone verification unavailable in this session.
+- Rollback: `fieldkit-before-v1.20.0` at `dd1ae48ec86cb602f9c6df964a0fb258fc41ebd7`.
+
 # v1.19.0 verification — 2026-10-18
 
 - 78 automated regression checks pass via `node fieldkit/tests/verify.cjs`.

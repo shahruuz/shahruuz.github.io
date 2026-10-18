@@ -1,5 +1,13 @@
 # FieldKit changelog
 
+## v1.20.0 — 2026-10-18
+
+- Three-tap visual introduction on first opening: count and locate gear, plan an owned-stock trip kit with optional Gemini, then pack with checkmarks or confirmed photo matches. Examples are clearly labeled and never enter inventory.
+- Next → Next → Start using FieldKit, plus Back and Skip. Remembers completion on this device and reopens from More → FieldKit in 3 taps.
+- Accessible modal focus, background isolation, keyboard support and phone-safe-area layout. Replaces the old first-run banner without changing inventory or the existing reset marker.
+- Rollback: fieldkit-before-v1.20.0 (dd1ae48).
+
+
 ## v1.19.0 — 2026-10-18
 
 - Plan a trip now references actual owned gear, with capped quantities and a separate acquisition/shopping list. It never creates unowned inventory. Local planning works without a key or connection.
