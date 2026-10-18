@@ -1,5 +1,9 @@
 # FieldKit changelog
 
+## v1.16.2 — 2026-10-18
+
+- Fix: Smart scan rejected valid Google keys in newer formats (for example keys containing dots). The key check now accepts any complete key and strips spaces, line breaks and quotes picked up while copying.
+
 ## v1.16.1 — 2026-10-18
 
 - Smart scan can be turned on directly from the Scan & pack screen ("Turn on Smart scan (free)"). The scan screen covers the tab bar, so the earlier hint pointing to More could not be followed from there. The More → Smart scan box remains.

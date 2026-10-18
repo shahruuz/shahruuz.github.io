@@ -192,8 +192,8 @@ async function scanLoadCoco(onStatus) {
   if (scanCoco) return scanCoco;
   if (!scanCocoLoading) scanCocoLoading = (async () => {
     onStatus?.('Getting the built-in item finder ready (first time only, about 18 MB)…');
-    if (!window.tf) await scanLoadScript('vendor/tf.min.js?v=1.16.1');
-    if (!window.cocoSsd) await scanLoadScript('vendor/coco-ssd.min.js?v=1.16.1');
+    if (!window.tf) await scanLoadScript('vendor/tf.min.js?v=1.16.2');
+    if (!window.cocoSsd) await scanLoadScript('vendor/coco-ssd.min.js?v=1.16.2');
     scanCoco = await window.cocoSsd.load({ base: 'mobilenet_v2', modelUrl: 'vendor/coco-ssd/model.json' });
     return scanCoco;
   })().catch(e => { scanCocoLoading = null; throw e });
@@ -301,8 +301,8 @@ function scanOpen(kit) {
   setTimeout(() => $('scanClose').focus(), 60);
 }
 function scanSaveKey(k) {
-  k = String(k || '').trim();
-  if (!/^[A-Za-z0-9_\-]{20,120}$/.test(k)) return 'That does not look like a Google AI Studio key.';
+  k = String(k || '').replace(/\s+/g, '').replace(/^["'`]+|["'`]+$/g, '');
+  if (!/^[\x21-\x7E]{20,200}$/.test(k)) return 'That does not look like a complete key. Copy the whole key from Google AI Studio and paste it again.';
   try { localStorage.setItem(SCAN_KEY_STORE, k); localStorage.removeItem(SCAN_MODEL_STORE) } catch { return 'Could not save the key on this device.' }
   return '';
 }
