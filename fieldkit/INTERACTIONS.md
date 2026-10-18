@@ -1,4 +1,4 @@
-# FieldKit v1.22.0 — swipe, then tap
+# FieldKit v1.23.0 — swipe, then tap
 
 A swipe reveals buttons. It never changes quantities, packs gear, confirms acquisition, deletes records, or opens an editor by itself. Tap a revealed button to apply it.
 
@@ -20,4 +20,4 @@ Kit names, emojis, colors, subtitles, descriptions and protection are customizab
 
 Quantity, archive and packing operations support Undo. Save failures restore prior data. Permanent deletion still requires confirmation and has no Undo; a failed deletion save retains the archived record. AI previews cannot apply if owned stock changed while they were being prepared or reviewed.
 
-No storage/reset key migration, paid services, accounts, analytics or automatic uploads were added. Validation uses disposable fixture records and realistic pointer sequences. Physical iPhone/Safari/browser visual testing is not claimed. Rollback: fieldkit-before-v1.22.0 at 98b6e0974741aee14a10459b0efeba31f5b62312.
+No storage/reset key migration, paid services, accounts, analytics or automatic uploads were added. Validation uses disposable fixture records and realistic pointer sequences. Physical iPhone/Safari/browser visual testing is not claimed. Rollback: fieldkit-before-v1.23.0 at 98b6e0974741aee14a10459b0efeba31f5b62312.

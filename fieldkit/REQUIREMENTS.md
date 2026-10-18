@@ -1,6 +1,6 @@
 # FieldKit requirements and decisions
 
-Updated 2026-10-18 (America/Denver). Current implementation: v1.22.0. Trip planner contract and full Gemini prompt/schema: PLANNER_SPEC.md.
+Updated 2026-10-18 (America/Denver). Current implementation: v1.23.0. Trip planner contract and full Gemini prompt/schema: PLANNER_SPEC.md.
 
 Each decision is marked **User** (Shahrouz decided or stated it) or **Proposal** (an assistant suggestion that is not approved until the user confirms it).
 
@@ -68,6 +68,6 @@ User requested swiping, long-hold drag/drop and customization across gear, kits,
 
 Release guard v1.21.1: new fuel drag/drop into carried/custom kits is blocked. Shared outdoor storage and explicit field editing remain available.
 
-## v1.22.0 — swipe repair
+## v1.23.0 — swipe repair
 
 User reported flawed swiping and requested fixes plus a related improvement audit. Current behavior supersedes prior direct swipe actions: a swipe reveals explicit buttons and never changes data alone. One controller handles rows/cards, preserves native vertical scrolling/pinch zoom and browser edges, cancels cleanly and suppresses only the completing gesture click. Packing drag and hold-grip reordering remain distinct. Stock/archive/packing saves are atomic, trip packing supports Undo, and stale AI inventory previews cannot apply. Physical Safari gesture testing is not claimed.

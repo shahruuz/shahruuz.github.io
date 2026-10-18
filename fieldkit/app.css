@@ -1,4 +1,4 @@
-/* FieldKit v1.22.0 — iPhone Notes-style app theme. Single application stylesheet. */
+/* FieldKit v1.23.0 — iPhone Notes-style app theme. Single application stylesheet. */
 :root{
   color-scheme:light;
   font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",system-ui,sans-serif;
@@ -481,3 +481,10 @@ textarea{resize:vertical;min-height:96px}
 @media print{.swipe-actions{display:none!important}.entity-surface,.swipe-surface{transform:none!important}}
 
 .entity-surface,.swipe-surface{will-change:auto}.swipe-tracking>.entity-surface,.swipe-tracking>.swipe-surface{will-change:transform}
+
+/* A real insertion gap previews the exact before/after placement. */
+.entity-insert-before{margin-top:32px!important;overflow:visible!important}
+.entity-insert-after{margin-bottom:32px!important;overflow:visible!important}
+.entity-insert-before::before,.entity-insert-after::after{content:attr(data-drop-label);position:absolute;left:8px;right:8px;height:26px;display:flex;align-items:center;justify-content:center;border:2px dashed var(--tint);border-radius:9px;background:var(--yellow-soft);color:var(--tint);font-size:11px;font-weight:600;pointer-events:none;box-sizing:border-box;z-index:5}
+.entity-insert-before::before{top:-29px}.entity-insert-after::after{bottom:-29px}
+.entity-ghost{white-space:pre-line;line-height:1.4}.entity-drop-over{background:var(--yellow-soft)!important;box-shadow:0 0 0 4px #e9b90033}

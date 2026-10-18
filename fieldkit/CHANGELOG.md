@@ -1,5 +1,12 @@
 # FieldKit changelog
 
+## v1.23.0 — 2026-10-18
+
+- Live insertion gaps show exactly where a dragged row will land, before or after another row. The lifted label names the destination.
+- Kit and bag drop targets highlight before release; invalid destinations do not show a valid drop preview. Auto-scroll refreshes the destination. Canceling removes all preview styling without saving.
+- Existing swipe actions, storage protections and on-device data are preserved.
+- Rollback: fieldkit-before-v1.23.0. 
+
 ## v1.22.0 — 2026-10-18
 
 - Replaces competing swipe handlers with one axis-locked controller for gear, kit/trip cards, trip items and missing supplies. Swiping reveals buttons; only tapping an action changes data or opens an editor. No automatic full-swipe actions.

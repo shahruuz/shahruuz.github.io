@@ -39,7 +39,20 @@ function entityToggleHidden(kind,id){return entityCommit(()=>{if(kind==='kit')cu
 function renderHiddenEntities(){const host=$('hiddenEntities');if(!host)return;const kits=orderedZones(true).filter(([id])=>zoneMeta(id).hidden),trips=orderedPlans().filter(p=>p.hidden);host.innerHTML=kits.map(([id,z])=>`<button type="button" class="entity-action" data-show-kind="kit" data-show-id="${id}">Show ${esc(z.name)}</button>`).join('')+trips.map(p=>`<button type="button" class="entity-action" data-show-kind="trip" data-show-id="${esc(p.id)}">Show ${esc(p.name)}</button>`).join('')||'<p class="hint">No hidden kits or trips.</p>'}
 function entityAction(action){if(!entityContext)return;const {kind,id}=entityContext;if(action==='back'){entityActions();return}if(action==='up'||action==='down'){entityNudge(kind,id,action==='up'?-1:1);return}if(action==='edit'){if(kind==='kit')entityEditKit(id);else if(kind==='trip')entityEditTrip(id);else if(kind==='missing')entityEditMissing(id);else {entityClose();if(kind==='gear')advancedOpen(items.find(x=>x.id===id)?.place,id);else planEditItem(id)}return}if(action==='quick'||action==='gear-details'){entityClose();if(action==='quick')quickOpen(null,id);else {plannerClose();advancedOpen(items.find(x=>x.id===id)?.place,id)}return}if(action==='move'){entityForm('<label>Move to kit / storage<select id="entityMoveZone">'+orderedZones(true).map(([id,z])=>`<option value="${id}">${esc(z.name)}</option>`).join('')+'</select></label>');$('entityForm').onsubmit=e=>{e.preventDefault();if(entityMoveGear(id,$('entityMoveZone').value))entityClose()};return}if(action==='status'){entityClose();openMove(id);return}if(action==='archive'){entityClose();archiveItem(id);return}if(action==='duplicate'){if(entityDuplicateTrip(id))entityClose();return}if(action==='hide'){if(entityToggleHidden(kind,id))entityClose();return}if(action==='acquire'){entityClose();planAcquire(Number(id));return}if(action==='remove'){if(kind==='trip-item')entityCommit(()=>{const p=planCurrent();if(p.state==='ended')throw Error('Past trips are read-only');p.items=p.items.filter(r=>r.inventoryId!==id);if(!p.excluded.includes(id))p.excluded.push(id)},'Removed from trip · owned stock unchanged');else entityCommit(()=>{const p=planCurrent();if(p.state==='ended')throw Error('Past trips are read-only');const m=p.missing[Number(id)];p.missingExcluded=[...(p.missingExcluded||[]),m.inventoryId||m.name.toLowerCase()];p.missing.splice(Number(id),1)},'Removed from missing list');entityClose()}}
 function entityTarget(el){return el?.closest?.('[data-entity-kind][data-entity-id]')||null}
-function entityDrop(source,target){if(!target)return false;const zone=target.closest?.('[data-drop-zone]');if(source.kind==='gear'&&zone)return entityMoveGear(source.id,zone.dataset.dropZone);const assignment=target.closest?.('[data-assign-person]');if(source.kind==='trip-item'&&assignment)return entityAssignTrip(source.id,assignment.dataset.assignPerson,assignment.dataset.assignBag);const row=entityTarget(target);if(!row||row.dataset.entityKind!==source.kind)return false;if(source.kind==='gear'){const a=items.find(i=>i.id===source.id),b=items.find(i=>i.id===row.dataset.entityId);if(!a||!b||itemMoveState(a)!==itemMoveState(b)||!!a.archived!==!!b.archived)return false}return entityReorder(source.kind,source.id,row.dataset.entityId,false,source.planId)}
+function entityDropIntent(source,target,y){
+ if(!target)return null;
+ const zone=target.closest?.('[data-drop-zone]');
+ if(source.kind==='gear'&&zone){const i=items.find(x=>x.id===source.id),id=zone.dataset.dropZone;if(!i||!ZONES[id]||i.place===id||(/propane|fuel canister|butane|gas cylinder/i.test(i.name)&&id!=='shared')||zoneProtected(i.place))return null;return {type:'zone',el:zone,id,label:'Move to '+ZONES[id].name}}
+ const assignment=target.closest?.('[data-assign-person]');
+ if(source.kind==='trip-item'&&assignment){const p=planCurrent(),i=items.find(x=>x.id===source.id);if(!p||p.state==='ended'||(/propane|fuel canister|butane|gas cylinder/i.test(i?.name||'')&&assignment.dataset.assignBag!=='Outdoor fuel storage'))return null;return {type:'assignment',el:assignment,person:assignment.dataset.assignPerson,bag:assignment.dataset.assignBag,label:'Move to '+assignment.dataset.assignPerson+' · '+assignment.dataset.assignBag}}
+ const row=entityTarget(target);if(!row||row.dataset.entityKind!==source.kind||row.dataset.entityId===source.id)return null;
+ if(source.kind==='gear'){const a=items.find(i=>i.id===source.id),b=items.find(i=>i.id===row.dataset.entityId);if(!a||!b||itemMoveState(a)!==itemMoveState(b)||!!a.archived!==!!b.archived)return null}
+ if((source.kind==='trip-item'||source.kind==='missing')&&planCurrent()?.state==='ended')return null;
+ const rect=row.getBoundingClientRect?.(),after=!!rect&&Number.isFinite(y)&&y>=rect.top+rect.height/2;
+ return {type:'reorder',el:row,id:row.dataset.entityId,after,label:(after?'After ':'Before ')+entityLabel(source.kind,row.dataset.entityId)};
+}
+function entityApplyDrop(source,intent){if(!intent)return false;if(intent.type==='zone')return entityMoveGear(source.id,intent.id);if(intent.type==='assignment')return entityAssignTrip(source.id,intent.person,intent.bag);return entityReorder(source.kind,source.id,intent.id,intent.after,source.planId)}
+function entityDrop(source,target,y){return entityApplyDrop(source,entityDropIntent(source,target,y))}
 // A single axis-locked controller owns swipes, row holds and reorder grips.
 let openEntitySwipe=null,entityGhostClick=null,resetEntityGesture=()=>{};
 function suppressEntityClick(row){entityGhostClick={row,expires:Date.now()+700}}
@@ -109,12 +122,21 @@ function entitySwipeAction(kind,id,action){
 function initEntityGestures(){
  let gesture=null,hold=null,frame=null,over=null;
  const clearHold=()=>{if(hold!==null)clearTimeout(hold);hold=null};
- const mark=el=>{over?.classList.remove('entity-drop-over');over=el;over?.classList.add('entity-drop-over')};
+ let dropIntent=null;
+ const mark=el=>{if(over){over.classList.remove('entity-drop-over','entity-insert-before','entity-insert-after');over.removeAttribute?.('data-drop-label')}over=el};
+ const preview=()=>{
+  if(!touchDrag)return;
+  // Remove the temporary gap before hit testing: its own layout must not change the destination.
+  mark(null);
+  const g=touchDrag;dropIntent=entityDropIntent(g,document.elementFromPoint(g.x,g.y),g.y);
+  if(dropIntent){over=dropIntent.el;over.classList.add(dropIntent.type==='reorder'?(dropIntent.after?'entity-insert-after':'entity-insert-before'):'entity-drop-over');over.setAttribute?.('data-drop-label','Drop here');}
+  $('entityGhost').textContent=entityLabel(g.kind,g.id)+'\n'+(dropIntent?'↓ '+dropIntent.label:'Move over a row or destination');
+ };
  const visible=row=>row?.isConnected!==false&&!row.closest?.('.hidden')&&(!row.getClientRects||row.getClientRects().length>0);
  const release=(el,pointer)=>{if(el?.hasPointerCapture?.(pointer))el.releasePointerCapture(pointer)};
  const stopDrag=()=>{
   if(touchDrag){const g=touchDrag;touchDrag=null;g.row.classList.remove('entity-dragging');release(g.handle,g.pointer)}
-  if(frame!==null)cancelAnimationFrame(frame);frame=null;mark(null);
+  if(frame!==null)cancelAnimationFrame(frame);frame=null;mark(null);dropIntent=null;
   $('entityGhost').classList.add('hidden');$('entityDropDock').classList.add('hidden');document.body.classList.remove('entity-drag-active');
  };
  const cancel=()=>{
@@ -130,7 +152,7 @@ function initEntityGestures(){
   const dy=g.y<130?-10:g.y>window.innerHeight-150?10:0;
   if(dy)scroll?.scrollBy({top:dy,behavior:'auto'});
   if(g.kind==='gear'&&g.y>window.innerHeight-140){const dock=$('entityDropDock').querySelector('div'),dx=g.x<45?-9:g.x>window.innerWidth-45?9:0;if(dx)dock?.scrollBy({left:dx,behavior:'auto'})}
-  frame=requestAnimationFrame(tick);
+  preview();frame=requestAnimationFrame(tick);
  };
  const beginDrag=p=>{
   hold=null;if(!visible(p.row)){cancel();return}
@@ -165,7 +187,7 @@ function initEntityGestures(){
   if(touchDrag?.pointer===e.pointerId){
    e.preventDefault();touchDrag.x=e.clientX;touchDrag.y=e.clientY;
    $('entityGhost').style.left=Math.max(8,Math.min(window.innerWidth-220,e.clientX-80))+'px';$('entityGhost').style.top=Math.max(8,e.clientY-70)+'px';
-   const el=document.elementFromPoint(e.clientX,e.clientY);mark(el?.closest?.('[data-drop-zone],[data-assign-person],[data-entity-kind]'));return;
+   preview();return;
   }
   const g=gesture;if(!g||g.pointer!==e.pointerId)return;
   if(!visible(g.row)){cancel();return}
@@ -185,8 +207,8 @@ function initEntityGestures(){
  },{passive:false});
  document.addEventListener('pointerup',e=>{
   if(touchDrag?.pointer===e.pointerId){
-   const g=touchDrag,target=document.elementFromPoint(e.clientX,e.clientY);stopDrag();clearHold();suppressEntityClick(g.row);
-   if(!entityDrop(g,target))toast('Move cancelled');return;
+   touchDrag.x=e.clientX;touchDrag.y=e.clientY;preview();const g=touchDrag,intent=dropIntent;stopDrag();clearHold();suppressEntityClick(g.row);
+   if(!entityApplyDrop(g,intent))toast('Move cancelled');return;
   }
   const g=gesture;if(!g||g.pointer!==e.pointerId)return;
   gesture=null;clearHold();release(g.row,g.pointer);
