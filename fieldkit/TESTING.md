@@ -1,3 +1,11 @@
+# v1.25.1 verification — 2026-10-18
+
+- 142 automated checks pass. Suggestion click adds directly without opening a form; it leaves the row unpacked. The checklist circle packs/unpacks without changing owned stock.
+- Existing stock and home metadata are reused, only shortfalls increase owned quantities, existing packed units remain packed, and Undo restores stock and suggestions. Tests cover stale click keys, quantity caps, save failures and emergency-gear separation.
+- Existing trip-first, return/refill, backup, consent, gesture and inventory checks continue passing. Published runtime files must match this release and the full suite must pass against the downloaded live app.
+- No browser visual or physical iPhone testing is claimed.
+- Rollback: `fieldkit-before-v1.25.1` at `8162ed15566c0db449775019e7fc09cc7ae4ae53`.
+
 # v1.25.0 verification — 2026-10-18
 
 - 137 automated regression checks pass. New scenario covers a family trip, collection by shelf, departure items, per-bag view, two trips competing for stock, consumed-supply confirmation, invalid finish input, finish Undo and save failure, return reservations, repeated refill, existing-owned fulfillment, backup validation, copying and zero-inventory setup.

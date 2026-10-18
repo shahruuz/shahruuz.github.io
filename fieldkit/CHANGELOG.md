@@ -1,5 +1,14 @@
 # FieldKit changelog
 
+## v1.25.1 — 2026-10-18
+
+- Suggestion ＋ adds the displayed quantity directly to the trip list, unpacked, without an acquisition form. Existing eligible stock is reused first; only the missing balance is added to owned stock. Existing storage, notes, photos and packed counts are preserved.
+- Newly added rows are brought into view. Their circle packs the full quantity; another tap unpacks. Adding a suggestion never packs it. Undo reverses the complete addition.
+- Trip and Refill suggestion buttons share the same action. Stable suggestion keys reject stale repeated clicks. Stock limits, emergency-gear protection and save-failure rollback remain enforced.
+- 142 automated checks pass, including direct click, full packing toggle, stock reuse/shortfall, existing partial packing, Undo, stale clicks, failed saves and protected stock. Physical iPhone/browser visual testing remains unavailable.
+- Rollback: fieldkit-before-v1.25.1 at 8162ed15566c0db449775019e7fc09cc7ae4ae53.
+
+
 ## v1.25.0 — 2026-10-18
 
 - Makes Trips the starting screen, with an active-outing card and concrete collect/departure/missing counts. Navigation is Trips, My gear, Refill, More. Storage-kit tools move under My gear; existing kits remain available.

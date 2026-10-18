@@ -1,3 +1,9 @@
+# FieldKit v1.25.1 — ＋ adds, circle packs
+
+Tap ＋ on a suggestion to add its displayed quantity directly to your trip list, unpacked. Existing eligible owned stock is reused; only a stock shortfall increases owned quantity. The new row is brought into view. Its circle packs all planned units and another tap unpacks them; −/+ supports partial packing. Undo reverses an accidental suggestion addition.
+
+This replaces the extra acquisition form for suggestion taps, including suggestions reached from Refill. Edit amounts through the existing suggestion/item menus when needed. Home storage and existing packed quantities are preserved. Stock reservations still prevent packing a unit already packed elsewhere.
+
 # FieldKit v1.25.0 — trip-first controls
 
 Trips is home. Continue the selected active outing, or plan a new one. My gear tracks owned quantities; Refill combines explicit replenishment targets, active-trip shortfalls and an expandable Empty list. Storage kits remain under My gear.
@@ -6,7 +12,7 @@ Collect from is the default trip view: pending gear is grouped by its home kit a
 
 Packing reserves owned stock across active trips. Finishing records only explicitly consumed units, then reserves remaining packed gear until returned. Return checkmarks never change owned quantities or storage. A return cannot be reversed while those units are packed elsewhere. Refill buttons add the shown quantity after the user has obtained it, with repeat-safe target counts and Undo.
 
-Adding missing gear first reuses matching eligible owned stock when available; otherwise it opens the actual-acquisition form. Dedicated emergency gear remains excluded from ordinary trips. AI consent and optional photo confirmation are preserved. Return shelf/location records never enter Google planner prompts.
+Suggestion ＋ directly adds unpacked gear, reusing owned stock first and adding only any shortfall. Dedicated emergency gear remains excluded from ordinary trips. AI consent and optional photo confirmation are preserved. Return shelf/location records never enter Google planner prompts.
 
 New installs start with no cataloged gear; existing inventories are never emptied by this release. The starter reset remains a deliberate recovery-backed action. Backups contain the new optional return/refill fields.
 
