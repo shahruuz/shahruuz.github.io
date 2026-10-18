@@ -1,5 +1,10 @@
 # FieldKit changelog
 
+## v1.16.1 — 2026-10-18
+
+- Smart scan can be turned on directly from the Scan & pack screen ("Turn on Smart scan (free)"). The scan screen covers the tab bar, so the earlier hint pointing to More could not be followed from there. The More → Smart scan box remains.
+- 58 regression checks pass.
+
 ## v1.16.0 — 2026-10-18
 
 - New **Scan & pack** game (Kits → Scan & pack, the camera button on Inventory, or Scan photo inside a kit): take one photo of gear laid out, see each item outlined and numbered on the photo, get a game piece per item (photo cut-out, emoji, editable name, count), then tap or drag pieces into the bag. Save adds new gear to the chosen kit, updates matching gear (count, packed state, photo if missing), keeps everything else, writes a recovery snapshot first and offers Undo.

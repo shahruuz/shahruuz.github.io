@@ -192,8 +192,8 @@ async function scanLoadCoco(onStatus) {
   if (scanCoco) return scanCoco;
   if (!scanCocoLoading) scanCocoLoading = (async () => {
     onStatus?.('Getting the built-in item finder ready (first time only, about 18 MB)…');
-    if (!window.tf) await scanLoadScript('vendor/tf.min.js?v=1.16.0');
-    if (!window.cocoSsd) await scanLoadScript('vendor/coco-ssd.min.js?v=1.16.0');
+    if (!window.tf) await scanLoadScript('vendor/tf.min.js?v=1.16.1');
+    if (!window.cocoSsd) await scanLoadScript('vendor/coco-ssd.min.js?v=1.16.1');
     scanCoco = await window.cocoSsd.load({ base: 'mobilenet_v2', modelUrl: 'vendor/coco-ssd/model.json' });
     return scanCoco;
   })().catch(e => { scanCocoLoading = null; throw e });
@@ -293,13 +293,26 @@ function scanOpen(kit) {
   const k = kit && Object.hasOwn(ZONES, kit) ? kit : (typeof openZone !== 'undefined' && openZone) || $('locationFilter').value || Object.keys(ZONES)[0];
   scanState = { kit: k, pieces: [] };
   scanKitOptions(k);
-  const hasKey = !!scanGetKey();
-  $('scanEngine').textContent = hasKey ? 'Smart scan' : 'Built-in';
-  $('scanKeyHint').innerHTML = hasKey ? 'Smart scan (Google Gemini) names your gear automatically.' : 'Built-in finder cuts items out automatically. For automatic names, add a free Google key in <b>More → Smart scan</b>.';
+  scanKeyUI();
+  $('scanKeyForm').classList.add('hidden');
   scanSetStep('start');
   $('scanLayer').classList.remove('hidden'); document.body.classList.add('scan-open');
   document.body.style.overflow = 'hidden';
   setTimeout(() => $('scanClose').focus(), 60);
+}
+function scanSaveKey(k) {
+  k = String(k || '').trim();
+  if (!/^[A-Za-z0-9_\-]{20,120}$/.test(k)) return 'That does not look like a Google AI Studio key.';
+  try { localStorage.setItem(SCAN_KEY_STORE, k); localStorage.removeItem(SCAN_MODEL_STORE) } catch { return 'Could not save the key on this device.' }
+  return '';
+}
+function scanKeyUI() {
+  const k = scanGetKey();
+  $('scanEngine').textContent = k ? 'Smart scan' : 'Built-in';
+  $('scanKeyHint').textContent = k ? 'Smart scan is on: Google Gemini names your gear automatically.' : 'Without Smart scan, items are cut out automatically and you name them.';
+  $('scanKeyToggle').textContent = k ? 'Smart scan is on · change key' : '✨ Turn on Smart scan (free)';
+  $('geminiKeyStatus').textContent = k ? 'Key saved on this device (ends …' + k.slice(-4) + ').' : 'No key saved — Scan uses the built-in finder.';
+  $('geminiKeyRemove').classList.toggle('hidden', !k);
 }
 function scanClose(force) {
   if ($('scanLayer').classList.contains('hidden')) return;
@@ -415,13 +428,20 @@ function initScan() {
   });
   scanInitDrag();
   // Smart scan settings (More)
-  const keyStatus = () => { const k = scanGetKey(); $('geminiKeyStatus').textContent = k ? 'Key saved on this device (ends …' + k.slice(-4) + ').' : 'No key saved — Scan uses the built-in finder.'; $('geminiKeyRemove').classList.toggle('hidden', !k) };
+  const keyStatus = scanKeyUI;
   $('geminiKeyForm').onsubmit = e => {
     e.preventDefault();
-    const k = $('geminiKey').value.trim();
-    if (!/^[A-Za-z0-9_\-]{20,120}$/.test(k)) { $('geminiKeyStatus').textContent = 'That does not look like a Google AI Studio key.'; return }
-    try { localStorage.setItem(SCAN_KEY_STORE, k); localStorage.removeItem(SCAN_MODEL_STORE) } catch { $('geminiKeyStatus').textContent = 'Could not save the key on this device.'; return }
+    const err = scanSaveKey($('geminiKey').value);
+    if (err) { $('geminiKeyStatus').textContent = err; return }
     $('geminiKey').value = ''; keyStatus(); toast('Smart scan is on');
+  };
+  $('scanKeyToggle').onclick = () => { const f = $('scanKeyForm'); f.classList.toggle('hidden'); if (!f.classList.contains('hidden')) $('scanKeyInput').focus() };
+  $('scanKeyForm').onsubmit = e => {
+    e.preventDefault();
+    const err = scanSaveKey($('scanKeyInput').value);
+    $('scanKeyStatus').textContent = err;
+    if (err) return;
+    $('scanKeyInput').value = ''; $('scanKeyForm').classList.add('hidden'); scanKeyUI(); toast('Smart scan is on');
   };
   $('geminiKeyRemove').onclick = () => { try { localStorage.removeItem(SCAN_KEY_STORE); localStorage.removeItem(SCAN_MODEL_STORE) } catch {} keyStatus(); toast('Smart scan key removed') };
   keyStatus();
