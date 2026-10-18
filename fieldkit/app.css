@@ -1,4 +1,4 @@
-/* FieldKit v1.17.0 — iPhone Notes-style app theme. Single application stylesheet. */
+/* FieldKit v1.18.0 — iPhone Notes-style app theme. Single application stylesheet. */
 :root{
   color-scheme:light;
   font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",system-ui,sans-serif;
@@ -429,3 +429,24 @@ textarea{resize:vertical;min-height:96px}
 .bulk-actions .bulk-move{flex:none;width:auto;min-height:42px!important;padding:0 32px 0 14px;border-radius:21px;background-color:var(--card);font-size:15px;box-shadow:0 .5px 1px rgba(0,0,0,.12)}
 .scan-all{display:flex;gap:4px}
 @media print{.bulk-bar,.text-btn{display:none!important}}
+
+/* Trip recommendations */
+.plan-hero{background:var(--yellow-soft);color:var(--ink)}
+.plan-hero .scan-hero-text small{color:var(--sec)}
+.planner-sheet{padding-bottom:calc(40px + env(safe-area-inset-bottom))}
+#plannerTitle{font-size:34px;letter-spacing:-1px;margin:8px 0 20px}
+#plannerPrompt{min-height:110px;background:var(--card);margin:8px 0 12px}
+.planner-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:24px}
+.planner-fields label:first-child{grid-column:1/-1}
+.planner-fields input,.planner-fields select{margin-top:6px;background-color:var(--card)}
+.planner-pack{background:var(--card);border-radius:16px;padding:12px 14px;margin:12px 0}
+.planner-pack summary{font-size:18px;font-weight:600;min-height:44px;display:flex;align-items:center;cursor:pointer;overflow-wrap:anywhere}
+.planner-include{display:flex;align-items:center;gap:10px;min-height:44px;color:var(--tint)}
+.planner-pack input[type=checkbox]{appearance:auto;width:22px;min-width:22px;height:22px;min-height:22px;padding:0;margin:0;accent-color:#8a6900}
+.planner-pack input[data-plan-name]{margin:6px 0 10px;background:var(--bg)}
+.planner-item{display:flex;gap:12px;align-items:center;border-top:.5px solid var(--sep);padding:6px 0}
+.planner-item label{flex:1;display:flex;gap:10px;align-items:center;min-height:44px;margin:0;font-size:15px;font-weight:400;min-width:0}
+.planner-item span{overflow-wrap:anywhere}
+.planner-item input[type=number]{width:68px;flex:none;background:var(--bg);text-align:center;font-size:16px;min-height:44px;padding:8px}
+#plannerMessage{margin-top:12px;color:var(--red)}
+@media print{.planner-sheet,.plan-hero{display:none!important}}

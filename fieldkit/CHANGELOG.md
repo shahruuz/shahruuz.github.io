@@ -1,5 +1,13 @@
 # FieldKit changelog
 
+## v1.18.0 — 2026-10-18
+
+- Kits → Plan a trip: describe destination, days and travelers; review local recommendations for city, beach, hiking, camping or cold trips. Edit trip details, kit names, quantities and selected items before creation.
+- Creates one personal kit per traveler plus shared kits, all To pack. Existing gear stays unchanged; no ownership or weather claims, API key, uploads or fees.
+- Custom kits survive reload, cross-tab updates, JSON export/import and recovery. Creation saves a recovery snapshot and supports Undo.
+- Rollback: fieldkit-before-v1.18.0 (13b5bbd).
+
+
 ## v1.17.0 — 2026-10-18
 
 - **Select mode** on Inventory and inside each kit: tap **Select**, tick several items (or **Select all** for what is on screen), then use the bottom bar: ✓ Pack, ○ To pack, +1, −1, Empty, Move to another kit, or Archive. One Undo reverses the whole batch.

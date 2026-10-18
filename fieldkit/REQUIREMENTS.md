@@ -48,3 +48,7 @@ Each decision is marked **User** (Shahrouz decided or stated it) or **Proposal**
 
 ## Verification
 See TESTING.md for observed results and limits. Desktop browser emulation is not a physical iOS/Safari test.
+
+## Trip planner — 2026-10-18
+- **User:** create kits from a description (example: 3 day San Diego trip for 3 people), recommend packs and help pack them.
+- **Implementation:** free on-device trip templates, editable assumptions and item quantities; personal kits plus shared day/camp kits. New records are unconfirmed suggestions, To pack, separate from existing inventory. No emergency-kit borrowing. Custom kits use the existing inventory payload and backup/recovery workflow.
