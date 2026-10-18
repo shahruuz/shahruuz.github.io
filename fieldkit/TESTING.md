@@ -1,3 +1,11 @@
+# v1.25.0 verification — 2026-10-18
+
+- 137 automated regression checks pass. New scenario covers a family trip, collection by shelf, departure items, per-bag view, two trips competing for stock, consumed-supply confirmation, invalid finish input, finish Undo and save failure, return reservations, repeated refill, existing-owned fulfillment, backup validation, copying and zero-inventory setup.
+- Existing quantity/Empty/Archive, notes/photos, swipe/drag, save-failure rollback, consent, AI preview and nested-editor checks continue passing. Entry-point assertions now reflect Trips home and ownership-only My gear.
+- Static app and 16 rendered fragments checked for balanced structure and nested forms/buttons. Runtime JavaScript syntax checks pass. No physical iPhone, Safari gesture, browser visual or live camera/Google-key verification is claimed.
+- Published runtime files must match the tested release and the regression suite must pass against downloaded live assets, including journey.js and the manifest.
+- Rollback: `fieldkit-before-v1.25.0` at `74c184b61ca8027c61887c9f4c5228af239b62fb`.
+
 # v1.24.0 verification — 2026-10-18
 
 - 123 automated regression checks pass, including nested modal Escape routing, restoring background interaction, kit/trip editor return paths, packed-only weights, refill metadata, file input accessibility, consistent trip gesture targets and save-failure indicators.

@@ -1,5 +1,18 @@
 # FieldKit changelog
 
+## v1.25.0 — 2026-10-18
+
+- Makes Trips the starting screen, with an active-outing card and concrete collect/departure/missing counts. Navigation is Trips, My gear, Refill, More. Storage-kit tools move under My gear; existing kits remain available.
+- My gear displays owned stock without trip packing circles. Trip packing defaults to collection groups by kit and shelf, with departure items and packed gear separated. Bags/people remains an alternate view. Packing never changes ownership or home storage.
+- Prevents multiple trips and photo packing from counting the same owned units twice. Gear awaiting return remains reserved until its return is recorded. Reversing a return is blocked if the gear has since been packed elsewhere.
+- Finishing a trip deducts only confirmed consumed packed units, creates return and refill records, preserves home locations, and supports guarded Undo. Refill controls add explicit quantities once; resolved historical tasks do not reappear after later consumption.
+- Missing entries can use newly recorded owned stock without adding ownership twice. New purchases remain explicit. Trip copies reset packing and follow-up records. Return/refill records survive JSON backup validation and are omitted from Google planner prompts.
+- Quick add needs only name and owned quantity; storage and legacy kit packing are optional. New installs start without a seeded catalog; existing data and the packing-reset marker are unchanged. A description can create the first local trip; AI is optional. Reusable bottles are not multiplied by days or marked consumed by local rules.
+- Updates the three-tap introduction to Plan → Collect/pack → Return/refill. Adds journey.js to the offline shell. No account, hosted storage, new service or cost.
+- 137 automated checks pass, including a full two-trip packing/return/refill scenario, rollback, backups, stock reuse and privacy. Static HTML plus 16 rendered fragments checked for balanced structure and nested controls. Browser visual and physical iPhone testing are unavailable.
+- Rollback: fieldkit-before-v1.25.0 at 74c184b61ca8027c61887c9f4c5228af239b62fb.
+
+
 ## v1.24.0 — 2026-10-18
 
 - Unifies inventory, kit details, trip packing and photo scanning around shared Notes-style lists, progress rings, packing circles, headings, buttons and editor sizes. Scan results use photo rows with familiar names and quantities.

@@ -1,3 +1,15 @@
+# FieldKit v1.25.0 — trip-first controls
+
+Trips is home. Continue the selected active outing, or plan a new one. My gear tracks owned quantities; Refill combines explicit replenishment targets, active-trip shortfalls and an expandable Empty list. Storage kits remain under My gear.
+
+Collect from is the default trip view: pending gear is grouped by its home kit and shelf. Departure-day items and completed packing are separate. Bags & people switches to destination grouping. Name taps open editing; packing circles and −/+ handle whole/partial quantities. Grips and swipe actions remain optional alternatives. Cross-group reordering does not silently relocate storage or assignments.
+
+Packing reserves owned stock across active trips. Finishing records only explicitly consumed units, then reserves remaining packed gear until returned. Return checkmarks never change owned quantities or storage. A return cannot be reversed while those units are packed elsewhere. Refill buttons add the shown quantity after the user has obtained it, with repeat-safe target counts and Undo.
+
+Adding missing gear first reuses matching eligible owned stock when available; otherwise it opens the actual-acquisition form. Dedicated emergency gear remains excluded from ordinary trips. AI consent and optional photo confirmation are preserved. Return shelf/location records never enter Google planner prompts.
+
+New installs start with no cataloged gear; existing inventories are never emptied by this release. The starter reset remains a deliberate recovery-backed action. Backups contain the new optional return/refill fields.
+
 # FieldKit v1.24.0 — one set of controls
 
 Inventory, kit details and trip checklists share packing circles, −/+ quantity controls, photo thumbnails and swipe-to-reveal actions. Trip quantities show packed / planned; inventory quantities show owned stock. Trip packing never changes owned stock.

@@ -143,3 +143,12 @@ This is the exact runtime responseJsonSchema, also available in planner-schema.j
 Run node fieldkit/tests/verify.cjs from the repository root. v1.19.0 has 78 passing automated checks, including fixture-based Gemini request/response tests. No live user-key Gemini generation, camera hardware, iPhone Safari or visual browser QA was available in this session.
 
 Rollback source: fieldkit-before-v1.19.0 at 0bf7e82a4ef6070050d4b60b76f3b3006a42bbfe. Restore source via a new versioned commit, never by clearing on-device data.
+
+
+## v1.25.0 trip lifecycle
+
+The Gemini output schema is unchanged. The application adds optional `returnItems` and `consumed` arrays to saved trips after finishing. Return rows store inventoryId, name, quantity, returned count, home place and shelf/spot. Consumption rows store inventoryId, name, confirmed used quantity, targetStock before use and resolved status. These are app-owned state, excluded from AI planning prompts.
+
+Active trip packed counts and unreturned units reserve owned stock across trips. Planning quantities may overlap; physical packing and snap confirmation are capped by stock remaining after other trip reservations. Finishing is atomic, recovery-backed and undoable; only user-confirmed consumables reduce stock. Completing returns releases reservations without changing home storage. Explicit refills settle targets and do not resurrect prior usage tasks.
+
+Collection view groups by home kit/shelf, then departure-day and packed groups. Bags/person is an alternate view. Missing entries can use newly recorded eligible owned units without increasing stock; true acquisitions still require explicit counts. Local reusable bottle counts are per person rather than per day and are not consumable units.

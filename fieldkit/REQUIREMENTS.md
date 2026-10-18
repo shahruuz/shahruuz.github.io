@@ -1,6 +1,6 @@
 # FieldKit requirements and decisions
 
-Updated 2026-10-18 (America/Denver). Current implementation: v1.24.0. Trip planner contract and full Gemini prompt/schema: PLANNER_SPEC.md.
+Updated 2026-10-18 (America/Denver). Current implementation: v1.25.0. Trip planner contract and full Gemini prompt/schema: PLANNER_SPEC.md.
 
 Each decision is marked **User** (Shahrouz decided or stated it) or **Proposal** (an assistant suggestion that is not approved until the user confirms it).
 
@@ -75,3 +75,7 @@ User reported flawed swiping and requested fixes plus a related improvement audi
 ## Unified experience — v1.24.0
 
 User: make the whole experience unified and effortless; fix obvious errors autonomously and publish. Inventory, kits, trips, scan and editors share the Notes visual language and common keyboard/layer behavior. Keep stock and per-trip packing meanings distinct. Preserve data and consent.
+
+## Trip-first workflow — v1.25.0
+
+User approved replacing feature-led inventory management with a complete Plan → Collect → Pack → Return/refill flow. Trips is the default destination; My gear is an ownership directory. No new cataloging prerequisite or AI/key requirement. Preserve current gear, storage, kits, statuses, photos and trips. A unit can be physically packed for one trip at a time. Used stock changes only by explicit confirmation; return tasks do not imply physical return until checked.
