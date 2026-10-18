@@ -1,17 +1,10 @@
-# FieldKit v1.15.0 verification
+# FieldKit v1.16.0 verification
 
-Pre-deployment (local copy, isolated test browser, nonprivate sample data):
-- node fieldkit/tests/verify.cjs: 49 of 49 pass.
-- 393 × 852 phone viewport and 1280 × 860 desktop: no horizontal overflow, no console errors.
-- Workflows exercised in the browser: tap to pack (status packed, count kept), Undo restores the saved "check" status, tap on an empty item restores its last count, + / − stepper, reload persistence, edit sheet (legacy verify item shows "To pack"), Move… menu, Kits overview, kit screen open and back, quick add, Archive view, More.
-- Loading and navigating leaves the saved inventory string byte-for-byte unchanged, including legacy "check" items, refill counts, archive timestamps and renamed kits; fieldkit_empty_start_2026_v1 stays "1".
-- Text contrast: accent text #8a5d00 and secondary text #6c6c70 are at least 4.5:1 on the app backgrounds.
+Pre-deployment (local copy, isolated headless Chromium at 393 × 852, nonprivate sample data and synthetic test photos in tests/fixtures):
+- node fieldkit/tests/verify.cjs: 57 of 57 pass, including segmentation on a synthetic image, detection/name merging, Gemini response parsing and box conversion, model choice, duplicate merging, save rules (matching gear updated, notes/spot/existing photos kept, other kits and archived items untouched), recovery snapshot + exact Undo, and key validation/never exported.
+- Built-in scan on tests/fixtures/scene.jpg: 7 of 7 items cut out and outlined; the cup was named by COCO-SSD; the rest were numbered for renaming. Tap-to-pack, drag-to-bag, cancelled drag, rename (emoji updates), tap-photo-to-add, remove, Save, kit opens with results, Undo restores the inventory.
+- Smart scan with Google's API simulated (Playwright route): requests were GET /v1beta/models then POST /v1beta/models/gemini-3.8-flash:generateContent; the key travelled only in the x-goog-api-key header. All 7 items named; Pack all → Save packed all 7 in the chosen kit.
+- Simulated HTTP 429 from Google: fell back to the built-in finder with a visible note.
+- Core app workflows (tap to pack, Undo, stepper, edit, move menu, kits, quick add, archive, more, desktop) re-run: no overflow, no page errors. Loading leaves saved data byte-for-byte unchanged; fieldkit_empty_start_2026_v1 stays "1".
 
-Not verified: physical iPhone/Safari, installed home-screen app, offline use, camera capture, printing.
-
-Published (2026-10-18, GitHub Pages run 39104137036, commit fcb1a7b, success):
-- Regular URL https://shahruuz.github.io/fieldkit/ without a version query reports v1.15.0, shows "v1.15.0" in the header, and loads app.css?v=1.15.0.
-- Returning visit is controlled by the service worker with cache fieldkit-shell-1.15.0 and still shows v1.15.0.
-- At 393 × 852: no horizontal overflow; Inventory shows To pack / Packed / Empty; Kits shows the overview bar and ring cards; no "verify" text on the page.
-- Checked in a separate desktop browser profile that held only the 50 starter items; no personal inventory was opened or changed.
-- Screenshots: tests/screenshots/v1.15.0-live-mobile.jpg (live, starter data); v1.15.0-kits-sample.png and v1.15.0-kit-sample.png (pre-deploy, labelled sample data).
+Not verified: a real Google key against the live Gemini API (requires the owner's free key), real phone camera photos, recognition speed on a physical iPhone, installed home-screen app, offline use.

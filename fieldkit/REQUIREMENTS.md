@@ -1,6 +1,6 @@
 # FieldKit requirements and decisions
 
-Updated 2026-10-18 (America/Denver). Release baseline: v1.13.1 (main ce8f776). Published: v1.14.0 (1797085). In progress: v1.15.0.
+Updated 2026-10-18 (America/Denver). Release baseline: v1.13.1 (main ce8f776). Published: v1.15.0 (fcb1a7b). In progress: v1.16.0 Scan & pack.
 
 Each decision is marked **User** (Shahrouz decided or stated it) or **Proposal** (an assistant suggestion that is not approved until the user confirms it).
 
@@ -32,7 +32,9 @@ Each decision is marked **User** (Shahrouz decided or stated it) or **Proposal**
 ## Other decisions
 - **User, 2026-10-17:** Free public launch; charging postponed. No checkout or subscription promises.
 - Public acquisition page lives at discover.html; the root opens the app directly so existing users keep their workflow.
-- Local browser storage remains the data model. No cloud sync, telemetry, external fonts, analytics or AI API. Photos are manual attachments, not automatic recognition.
+- Local browser storage remains the data model. No cloud sync, telemetry, external fonts or analytics.
+- **User, 2026-10-18:** wants a game: take a picture, items become pieces (picture/emoji), drag them into the bag, and the list updates; the initial list comes from the picture. Wants it free and automatic; "it's totally ok if it leaves my phone, being free is more important." Asked to be interrupted only for decisions that make a huge difference.
+- **Implemented v1.16.0:** Scan & pack with optional free Google Gemini Smart scan (owner's own key, saved on device) and a built-in on-device finder as the no-key fallback. Owner must create the free key; Claude cannot create accounts.
 - Existing features retained: optional item weights, named kits, refill view, printable packing list, offline shell, starter onboarding and automatic pre-import/reset recovery snapshot.
 - Marketing uses an explicitly labelled interactive sample, never the owner's records. No testimonials, unverified claims or invented users.
 - A free public app in a public repository has no payment enforcement. A later paid release requires a fresh commercial decision.

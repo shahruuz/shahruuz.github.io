@@ -1,5 +1,14 @@
 # FieldKit changelog
 
+## v1.16.0 — 2026-10-18
+
+- New **Scan & pack** game (Kits → Scan & pack, the camera button on Inventory, or Scan photo inside a kit): take one photo of gear laid out, see each item outlined and numbered on the photo, get a game piece per item (photo cut-out, emoji, editable name, count), then tap or drag pieces into the bag. Save adds new gear to the chosen kit, updates matching gear (count, packed state, photo if missing), keeps everything else, writes a recovery snapshot first and offers Undo.
+- **Smart scan (optional, free):** with a Google AI Studio key saved under More → Smart scan, photos are sent to Google Gemini, which names and locates every item. The key stays on the device, is never exported, and goes in a request header (never in a URL). The newest available free "flash" model is picked automatically. If Gemini fails or the free limit is reached, the built-in finder is used and the reason is shown.
+- **Built-in finder (no key):** automatic cut-outs on a plain background plus on-device COCO-SSD names for everyday objects. Its files (about 18 MB) are self-hosted under vendor/ and downloaded only on first scan, then cached.
+- Privacy page updated for Smart scan. User decision: free matters more than keeping photos on the phone.
+- 57 regression checks pass (8 new for scanning).
+- Rollback: fieldkit-v1.15.0-stable (fcb1a7b).
+
 ## v1.15.0 — 2026-10-18
 
 - Removed the "Need verify" state from every screen (user decision). Packing is now To pack → Packed, with Empty kept in the same list.
