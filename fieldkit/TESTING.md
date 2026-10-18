@@ -1,3 +1,12 @@
+# v1.24.0 verification — 2026-10-18
+
+- 123 automated regression checks pass, including nested modal Escape routing, restoring background interaction, kit/trip editor return paths, packed-only weights, refill metadata, file input accessibility, consistent trip gesture targets and save-failure indicators.
+- The existing swipe, drag/drop, quantities, Archive, Undo, owned-stock caps, missing supplies, consent and stale AI preview checks continue passing.
+- Static app and seven rendered surfaces checked for nested buttons/forms. Runtime JavaScript syntax checks pass.
+- Verification uses disposable JavaScript/DOM fixtures. Browser visual and physical iPhone/Safari touch testing are unavailable; no claim of visual verification is made.
+- Published runtime files must match this release and the regression suite must pass against downloaded live assets.
+- Rollback: `fieldkit-before-v1.24.0` at `72c2679809bc527a0dc02c433e03de14d8134d2c`.
+
 # v1.23.0 verification — 2026-10-18
 
 - 115 automated regression checks pass. New coverage dispatches capture listeners before bubbling listeners and honors cancellation. Cases include diagonal/reversed/short/edge swipes, scroll and pointer cancellation, capture loss, multiple pointers, detached rows, one-open-row behavior, outside/scroll/Escape closure, long-hold cancellation, synthetic vs fresh/keyboard clicks, explicit actions, canceled deletion and no-op stock controls.

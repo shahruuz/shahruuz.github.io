@@ -318,6 +318,7 @@ function scanKitOptions(selected) {
   $('scanKit').innerHTML = Object.entries(ZONES).map(([id, z]) => `<option value="${id}"${id === selected ? ' selected' : ''}>${scanEsc(z.name)}</option>`).join('');
 }
 function scanOpen(kit) {
+  resetEntityGesture();setSelectMode(false);
   const k = kit && Object.hasOwn(ZONES, kit) ? kit : (typeof openZone !== 'undefined' && openZone) || $('locationFilter').value || Object.keys(ZONES)[0];
   scanState = { kit: k, pieces: [] };
   scanKitOptions(k);
@@ -326,7 +327,8 @@ function scanOpen(kit) {
   scanSetStep('start');
   $('scanLayer').classList.remove('hidden'); document.body.classList.add('scan-open');
   document.body.style.overflow = 'hidden';
-  setTimeout(() => $('scanClose').focus(), 60);
+  uiSyncLayers();$('scanLayer').querySelector('.scan-sheet')?.scrollTo?.({top:0});
+  setTimeout(() => {if(uiTopModal()===$('scanLayer'))$('scanClose').focus()}, 60);
 }
 function scanSaveKey(k) {
   k = String(k || '').replace(/\s+/g, '').replace(/^["'`]+|["'`]+$/g, '');
@@ -339,7 +341,7 @@ function scanKeyUI() {
   $('scanEngine').textContent = k ? 'Smart scan' : 'Built-in';
   $('scanKeyHint').textContent = k ? 'Smart scan is on: Google Gemini names your gear automatically.' : 'Without Smart scan, items are cut out automatically and you name them.';
   $('scanKeyToggle').textContent = k ? 'Smart scan is on · change key' : '✨ Turn on Smart scan (free)';
-  $('geminiKeyStatus').textContent = k ? 'Key saved on this device (ends …' + k.slice(-4) + ').' : 'No key saved — Scan uses the built-in finder.';
+  $('geminiKeyStatus').textContent = k ? 'Key saved on this device (ends …' + k.slice(-4) + ').' : 'No key saved. Scan works on this device; AI is optional.';
   $('geminiKeyRemove').classList.toggle('hidden', !k);
 }
 function scanClose(force) {
@@ -347,7 +349,8 @@ function scanClose(force) {
   if (!force && scanState?.pieces?.length && !confirm('Leave without saving these items?')) return;
   $('scanLayer').classList.add('hidden'); document.body.classList.remove('scan-open');
   scanState = null;
-  if (!$('detail').classList.contains('show')) document.body.style.overflow = '';
+  uiSyncLayers();
+  if($('detail').classList.contains('show'))$('detailClose').focus();else (current==='inventory'?$('invScan'):$('scanOpen')).focus();
 }
 async function scanFile(file) {
   if (!file || !scanState) return;
@@ -426,7 +429,7 @@ function scanSetBag(id, inBag) {
 }
 function initScan() {
   for (const id of ['scanOpen', 'invScan']) { const b = $(id); if (b) b.onclick = () => scanOpen() }
-  $('detailScan').onclick = () => { const k = openZone; zoneClose(); scanOpen(k) };
+  $('detailScan').onclick = () => scanOpen(openZone);
   $('scanClose').onclick = () => scanClose();
   $('scanKit').onchange = () => { if (scanState) { scanState.kit = $('scanKit').value; if (scanState.pieces.length) scanRender() } };
   for (const id of ['scanCamera', 'scanLibrary']) $(id).onchange = e => { const f = e.target.files?.[0]; e.target.value = ''; scanFile(f) };
@@ -476,7 +479,6 @@ function initScan() {
   };
   $('geminiKeyRemove').onclick = () => { try { localStorage.removeItem(SCAN_KEY_STORE); localStorage.removeItem(SCAN_MODEL_STORE) } catch {} keyStatus(); toast('Smart scan key removed') };
   keyStatus();
-  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('scanLayer').classList.contains('hidden') && document.activeElement?.tagName !== 'INPUT') scanClose() });
 }
 let scanSuppressClick = 0;
 function scanInitDrag() {
@@ -511,3 +513,4 @@ function scanInitDrag() {
   document.addEventListener('pointercancel', e => end(e, true));
 }
 if (typeof document !== 'undefined' && typeof $ === 'function' && $('scanLayer')) initScan();
+

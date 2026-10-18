@@ -1,3 +1,15 @@
+# FieldKit v1.24.0 — one set of controls
+
+Inventory, kit details and trip checklists share packing circles, −/+ quantity controls, photo thumbnails and swipe-to-reveal actions. Trip quantities show packed / planned; inventory quantities show owned stock. Trip packing never changes owned stock.
+
+Scan gear uses photo rows with the same list rhythm. The scan board remains an explicit preview: Save applies it to inventory, with Undo. Google AI remains optional and existing sharing consent still applies.
+
+Screens use a shared content width and heading scale. Editors share one sheet size. Escape closes the topmost layer or cancels a trip inline editor; underlying screens remain inert until revealed. Scan cancellation returns to the source kit. Full item details Save/Back returns to the source kit or trip.
+
+File buttons retain their native keyboard-accessible inputs. Save failures turn the header indicator red. Refilling and editing preserve prior quantities and notes.
+
+Rollback: `fieldkit-before-v1.24.0` at `72c2679809bc527a0dc02c433e03de14d8134d2c`.
+
 # FieldKit v1.23.0 — swipe, then tap
 
 A swipe reveals buttons. It never changes quantities, packs gear, confirms acquisition, deletes records, or opens an editor by itself. Tap a revealed button to apply it.

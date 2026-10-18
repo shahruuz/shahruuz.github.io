@@ -1,5 +1,16 @@
 # FieldKit changelog
 
+## v1.24.0 — 2026-10-18
+
+- Unifies inventory, kit details, trip packing and photo scanning around shared Notes-style lists, progress rings, packing circles, headings, buttons and editor sizes. Scan results use photo rows with familiar names and quantities.
+- Kits separates saved trips from storage kits. Optional Google AI controls use consistent naming. Core item fields come before custom fields; short instructions replace repeated explanations.
+- Centralizes modal keyboard and background interaction rules: Escape closes only the top layer, inline trip editors can cancel, scan returns to its source kit, and full details Save/Back returns to its source kit or trip. New screens reset their own scroll position.
+- Corrects packed-weight labels, compact ring sizing, narrow-screen kit action overflow, inaccessible hidden file inputs and failed-save indicator color. Full-detail edits preserve refill metadata.
+- 123 automated regression checks pass; static and rendered markup checked for nested controls. Browser visual and physical iPhone testing unavailable in this environment.
+- Existing inventory, photos, notes, custom kits, trip plans, storage/reset keys and Google sharing consent are preserved. No new service or cost.
+- Rollback: fieldkit-before-v1.24.0 at 72c2679809bc527a0dc02c433e03de14d8134d2c.
+
+
 ## v1.23.0 — 2026-10-18
 
 - Live insertion gaps show exactly where a dragged row will land, before or after another row. The lifted label names the destination.
