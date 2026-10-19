@@ -1,3 +1,11 @@
+# v1.27.0 verification — 2026-10-18
+
+- 179 automated checks pass. Existing inventory-engine tests run without the new default UI override, then 14 new tests initialize the actual departure flow.
+- New coverage: zero-inventory template creation, quantities by days/people, add unpacked, check/Undo, explicit Need to get blocker, partial counts, Before leaving, repeat/reset, backup/reload, existing ownership conflicts, validation, save-failure rollback and finish/repeat.
+- Static HTML has 256 unique IDs and no nested forms or buttons. Runtime JavaScript syntax checks pass.
+- Local server preview unavailable in the execution environment; published browser QA follows deployment. No physical iPhone/Safari, installed PWA, real offline, camera or live Google API test is claimed.
+- Rollback source: 1596c138846c83ca6a3e6036ef24473168bcd1e8 (v1.26.1).
+
 # v1.26.1 verification — 2026-10-18
 
 - 165 automated checks pass, including selection focus after redraw and safe focus fallback from a disabled packed-quantity control.

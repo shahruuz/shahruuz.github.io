@@ -1,6 +1,6 @@
 # FieldKit requirements and decisions
 
-Updated 2026-10-18 (America/Denver). Current implementation: v1.26.1. Trip planner contract and full Gemini prompt/schema: PLANNER_SPEC.md.
+Updated 2026-10-18 (America/Denver). Current implementation: v1.27.0. Trip planner contract and full Gemini prompt/schema: PLANNER_SPEC.md.
 
 Each decision is marked **User** (Shahrouz decided or stated it) or **Proposal** (an assistant suggestion that is not approved until the user confirms it).
 
@@ -89,3 +89,7 @@ User: ＋ on suggestions should go directly to my list, and a checkmark means pa
 User: explain the benefit over Notes or AI in one sentence, improve the product, and test the overall experience. Implemented: accurate progress including missing suggestions; next physical action with home storage; trip-specific Select / Select all, Pack selected / Unpack selected with stock caps and Undo; To pack only filter; duplicate owned-item selector repair; recovered swipe repair from the unpublished v1.25.2 work. No data migration, new service, cost, or hosting change.
 
 Published browser QA refinement v1.26.1: preserve row keyboard focus and separate the narrow trip-action controls into two equal buttons plus a separate finish action.
+
+## v1.27.0 — less setup, faster departures
+
+User: strip unnecessary inventory listing, prioritize getting ready to leave, evaluate templates instead of AI, fewer stronger features. The default screen is the active packing checklist; navigation is Pack / More. Hotel/weekend, day hike, camping and blank lists create standalone checklist rows without claiming ownership. Repeat preserves edits and resets packing. Need to get blocks a packing check; Before leaving groups late tasks. Existing inventory, quantities, photos, names, archive and reset marker are preserved behind More. Existing stock-linked trip items retain reservations. No new service, AI calls or costs. Legacy advanced inventory and AI functions remain available separately and do not gate the simple workflow. This direction supersedes the inventory-first setup and five-stage default journey.

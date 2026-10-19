@@ -1,5 +1,15 @@
 # FieldKit changelog
 
+## v1.27.0 — 2026-10-18
+
+- Replaces the four-destination inventory workflow with Pack / More and an active checklist directly on the main screen.
+- Adds four small starting lists: Hotel / weekend, Day hike, Camping and Blank. No inventory catalog, account, description parsing or AI key is needed.
+- Checklist rows are separate from ownership. Add, edit, partial packing, Need to get, Before leaving, collapsed Packed and Undo work without increasing owned quantities.
+- Repeat a trip preserves edited names, quantities and locations, but resets every packing check. JSON backup/import validates and preserves checklist rows.
+- Existing gear and inventory-linked trip reservations remain intact under More. Optional AI and photo tools are secondary. No automatic data migration, new service, cost or hosting change.
+- 179 automated checks pass, including 14 new departure-flow checks and the retained inventory/gesture/AI regressions. Published browser QA follows deployment. Physical iPhone/Safari remains unverified.
+- Rollback source: 1596c138846c83ca6a3e6036ef24473168bcd1e8 (v1.26.1).
+
 ## v1.26.1 — 2026-10-18
 
 - Published phone-width QA found cramped Add gear / Scan photo controls; gives them equal full-width columns and separates Back from trip.
