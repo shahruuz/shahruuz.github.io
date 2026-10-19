@@ -1,5 +1,14 @@
 # FieldKit changelog
 
+## v1.26.0 — 2026-10-18
+
+- Trip progress includes missing supplies, avoiding 0/0 or completed rings while supplies are missing. Up next names the next item, its home location and quantity left; tap to jump to it.
+- Trip checklists gain Select, Select all, Pack selected and Unpack selected with one Undo. To pack only reduces the list; Select all follows that view. Bulk packing respects other-trip reservations and never changes owned quantities.
+- Fixes a duplicate Add owned gear selector that prevented the chosen item from being added.
+- Carries forward the unpublished v1.25.2 swipe repair: touchable revealed surfaces, inward/reverse swipes, starts on circles/quantity controls, native vertical scrolling, release-position settling and row-specific accidental-click suppression. Hold-and-drag stays on the grip.
+- Clarifies the product benefit and updates help about optional photo scanning. Existing gear, photos, notes, trips, storage/reset keys and origin are preserved.
+- Rollback: fieldkit-before-v1.26.0 at 2e52e3e25fe8ac2fcea1b6853d7e28bf53913d14.
+
 ## v1.25.1 — 2026-10-18
 
 - Suggestion ＋ adds the displayed quantity directly to the trip list, unpacked, without an acquisition form. Existing eligible stock is reused first; only the missing balance is added to owned stock. Existing storage, notes, photos and packed counts are preserved.

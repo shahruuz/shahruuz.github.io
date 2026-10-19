@@ -1,4 +1,4 @@
-# FieldKit v1.25.1 — ＋ adds, circle packs
+# FieldKit v1.26.0 — ＋ adds, circle packs
 
 Tap ＋ on a suggestion to add its displayed quantity directly to your trip list, unpacked. Existing eligible owned stock is reused; only a stock shortfall increases owned quantity. The new row is brought into view. Its circle packs all planned units and another tap unpacks them; −/+ supports partial packing. Undo reverses an accidental suggestion addition.
 

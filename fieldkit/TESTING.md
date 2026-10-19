@@ -1,3 +1,10 @@
+# v1.26.0 verification — 2026-10-18
+
+- 163 automated checks pass: existing inventory, swipe/cancellation, planner, backups, consent and recovery coverage, plus trip progress including missing units, location-based next action, selection click-through, filtered Select all, reserved-stock caps, bulk pack/unpack Undo, failed-save rollback, finished-trip protection and dynamic Add owned gear selector.
+- Static HTML checked for duplicate IDs and nested form/button controls. Source diff whitespace checks pass.
+- Local supervised preview could not start: bwrap cannot mount proc (environment limitation). Published desktop and 393 × 852 CSS-pixel browser QA follows deployment. No physical iPhone/Safari, live camera or real Google-key test is claimed.
+- Rollback: fieldkit-before-v1.26.0 at 2e52e3e25fe8ac2fcea1b6853d7e28bf53913d14.
+
 # v1.25.1 verification — 2026-10-18
 
 - 142 automated checks pass. Suggestion click adds directly without opening a form; it leaves the row unpacked. The checklist circle packs/unpacks without changing owned stock.

@@ -154,6 +154,6 @@ Active trip packed counts and unreturned units reserve owned stock across trips.
 Collection view groups by home kit/shelf, then departure-day and packed groups. Bags/person is an alternate view. Missing entries can use newly recorded eligible owned units without increasing stock; true acquisitions still require explicit counts. Local reusable bottle counts are per person rather than per day and are not consumable units.
 
 
-## v1.25.1 suggestion action
+## v1.26.0 suggestion action
 
 Suggestion ＋ directly accepts its quantity into the trip list, unpacked. The explicit user action reuses matching eligible owned units and adds only any owned-stock shortfall. It does not pack anything. Existing packed units remain unchanged when the row quantity grows. The packing circle marks the full quantity packed, subject to physical stock reservations; another tap unpacks. Undo reverses the add. The Gemini schema is unchanged.

@@ -61,7 +61,8 @@ function suppressEntityClick(row){entityGhostClick={row,expires:Date.now()+700}}
 function consumeEntityGhostClick(e){
  if(!entityGhostClick||Date.now()>entityGhostClick.expires){entityGhostClick=null;return false}
  if(e.detail===0)return false; // Keyboard and assistive activation are always usable.
- entityGhostClick=null;return true;
+ const source=entityGhostClick.row,target=entityTarget(e.target);entityGhostClick=null;
+ return !!source&&(target===source||target?.dataset.entityKind===source.dataset.entityKind&&target?.dataset.entityId===source.dataset.entityId);
 }
 function entitySwipeSpecs(kind,id){
  if(kind==='gear'){
@@ -84,18 +85,32 @@ function entitySwipeRails(kind,id){
 }
 function entitySwipeSurface(row){return row.querySelector('.entity-surface,.swipe-surface')||row}
 function entitySwipeWidth(row,side){return entitySwipeSpecs(row.dataset.entityKind,row.dataset.entityId)[side].length*80}
+// A revealed row must remain touchable for the closing swipe. `inert` on its
+// surface prevents hit testing in Safari, so only the hidden action rails use it.
+const swipeTabStops=new WeakMap(),swipeReturnFocus=new WeakMap();
 function paintEntitySwipe(row,offset,settled=false){
- const surface=entitySwipeSurface(row);
+ const surface=entitySwipeSurface(row),open=settled&&offset!==0;
  row.classList.toggle('swipe-tracking',!settled&&offset!==0);
- row.classList.toggle('swipe-open',settled&&offset!==0);
+ row.classList.toggle('swipe-open',open);
  row.dataset.swipeOffset=String(offset);
- row.dataset.swipeOpen=settled&&offset!==0?(offset>0?'leading':'trailing'):'';
+ row.dataset.swipeOpen=open?(offset>0?'leading':'trailing'):'';
  surface.style.transform=offset?'translateX('+offset+'px)':'';
- surface.inert=!!(settled&&offset);
- for(const rail of row.querySelectorAll('[data-swipe-rail]')){
-  const visible=settled&&offset!==0&&rail.dataset.swipeRail===(offset>0?'leading':'trailing');
-  rail.inert=!visible;rail.setAttribute('aria-hidden',String(!visible));
+ surface.inert=false;if(!open)surface.setAttribute('aria-hidden','false');
+ if(open&&!swipeTabStops.has(surface)){
+  const stops=[...surface.querySelectorAll('button,input,select,textarea,summary,a[href],[tabindex]')].map(el=>[el,el.getAttribute('tabindex')]);
+  swipeTabStops.set(surface,stops);for(const [el]of stops)el.setAttribute('tabindex','-1');
+ }else if(!open&&swipeTabStops.has(surface)){
+  for(const [el,value]of swipeTabStops.get(surface))if(value===null)el.removeAttribute('tabindex');else el.setAttribute('tabindex',value);
+  swipeTabStops.delete(surface);
  }
+ for(const rail of row.querySelectorAll('[data-swipe-rail]')){
+  const visible=open&&rail.dataset.swipeRail===(offset>0?'leading':'trailing');
+  const hadFocus=rail.contains?.(document.activeElement);
+  rail.inert=!visible;rail.setAttribute('aria-hidden',String(!visible));
+  if(visible&&surface.contains?.(document.activeElement)){swipeReturnFocus.set(row,document.activeElement);rail.querySelector('button')?.focus({preventScroll:true})}
+  else if(!open&&hadFocus){const previous=swipeReturnFocus.get(row);if(previous?.isConnected)previous.focus({preventScroll:true})}
+ }
+ surface.setAttribute('aria-hidden',String(open));if(!open)swipeReturnFocus.delete(row);
 }
 function closeEntitySwipe(){if(openEntitySwipe){paintEntitySwipe(openEntitySwipe,0,true);openEntitySwipe=null}}
 function settleEntitySwipe(row,offset){closeEntitySwipe();paintEntitySwipe(row,offset,true);if(offset)openEntitySwipe=row}
@@ -169,7 +184,7 @@ function initEntityGestures(){
   // A fresh touch is a deliberate action, never a ghost from a previous swipe.
   entityGhostClick=null;
   if(e.isPrimary===false){cancel();return}
-  if(e.button!==0||selectMode)return;
+  if(e.button!==0||selectMode||journeySelecting)return;
   const row=entityTarget(e.target);
   if(openEntitySwipe&&row!==openEntitySwipe)closeEntitySwipe();
   if(!row||e.clientX<24||e.clientX>window.innerWidth-24)return;
@@ -177,11 +192,11 @@ function initEntityGestures(){
   if(gesture||touchDrag)cancel();
   const base=Number(row.dataset.swipeOffset)||0;
   const grip=e.target.closest?.('[data-drag-kind]');
-  if(!base&&!grip&&e.target.closest?.('input,textarea,select,a,[data-move],.row-stepper,.trip-check,.trip-item-actions,.entity-more,.select-dot'))return;
+  if(!grip&&e.target.closest?.('input,textarea,select,a,.entity-more,.select-dot'))return;
   const p={kind:row.dataset.entityKind,id:row.dataset.entityId,row,handle:grip,pointer:e.pointerId,startX:e.clientX,startY:e.clientY,dx:0,axis:null,base};
   gesture=p;
   if(grip)hold=setTimeout(()=>beginDrag(p),320);
-  else if(!base)hold=setTimeout(()=>{
+  else if(!base&&!e.target.closest?.('button,summary'))hold=setTimeout(()=>{
    hold=null;if(gesture!==p||!visible(p.row))return;gesture=null;suppressEntityClick(p.row);entityOpen(p.kind,p.id);
   },500);
  });
@@ -197,8 +212,8 @@ function initEntityGestures(){
   if(ax>8||ay>8){g.moved=true;clearHold()}
   if(g.handle){if(ax>8||ay>8){suppressEntityClick(g.row);gesture=null}return}
   if(!g.axis){
-   if(ay>=10&&ay>=ax){suppressEntityClick(g.row);gesture=null;paintEntitySwipe(g.row,0,true);closeEntitySwipe();return}
-   if(ax<16||ax<ay*1.5)return;
+   if(ay>=8&&ay>=ax){suppressEntityClick(g.row);gesture=null;paintEntitySwipe(g.row,0,true);closeEntitySwipe();return}
+   if(ax<12||ax<ay*1.3)return;
    g.axis='x';g.row.setPointerCapture?.(g.pointer);
    if(openEntitySwipe&&openEntitySwipe!==g.row)closeEntitySwipe();
   }
@@ -220,9 +235,9 @@ function initEntityGestures(){
    return;
   }
   suppressEntityClick(g.row);
-  const total=g.base+g.dx,side=total>=0?'leading':'trailing',width=entitySwipeWidth(g.row,side);
+  g.dx=e.clientX-g.startX;const total=g.base+g.dx,side=total>=0?'leading':'trailing',width=entitySwipeWidth(g.row,side);
   const closing=g.base&&Math.sign(g.base)!==Math.sign(g.dx)&&Math.abs(g.dx)>=32&&Math.sign(total)===Math.sign(g.base);
-  const offset=!closing&&Math.abs(total)>=Math.min(48,width*.4)?Math.sign(total)*width:0;
+  const offset=!closing&&Math.abs(total)>=Math.min(32,width*.3)?Math.sign(total)*width:0;
   settleEntitySwipe(g.row,offset);
  });
  document.addEventListener('pointercancel',e=>{if((gesture&&gesture.pointer===e.pointerId)||(touchDrag&&touchDrag.pointer===e.pointerId))cancel()});
@@ -231,6 +246,7 @@ function initEntityGestures(){
  document.addEventListener('visibilitychange',()=>{if(document.hidden)cancel()});
  document.addEventListener('scroll',()=>{if(!touchDrag)closeEntitySwipe()},true);
  document.addEventListener('click',e=>{
+  if(selectMode||journeySelecting)return;
   if(consumeEntityGhostClick(e)){e.preventDefault();e.stopImmediatePropagation();return}
   const row=entityTarget(e.target),action=e.target.closest?.('[data-swipe-action]');
   if(action&&row){e.preventDefault();e.stopImmediatePropagation();entitySwipeAction(row.dataset.entityKind,row.dataset.entityId,action.dataset.swipeAction);return}
@@ -243,6 +259,7 @@ function initEntityGestures(){
  },true);
  document.addEventListener('contextmenu',e=>{
   const row=entityTarget(e.target);
+  if(selectMode||journeySelecting){if(row)e.preventDefault();return}
   if(row&&!e.target.closest('input,textarea,select')){e.preventDefault();if(touchDrag||e.target.closest('[data-drag-kind]'))return;cancel();entityOpen(row.dataset.entityKind,row.dataset.entityId)}
  });
  document.addEventListener('keydown',e=>{

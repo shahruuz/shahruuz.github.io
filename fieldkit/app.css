@@ -1,4 +1,4 @@
-/* FieldKit v1.25.1 — iPhone Notes-style app theme. Single application stylesheet. */
+/* FieldKit v1.26.0 — iPhone Notes-style app theme. Single application stylesheet. */
 :root{
   color-scheme:light;
   font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",system-ui,sans-serif;
@@ -112,7 +112,7 @@ p{margin:8px 0}
 .print-qty{display:none}
 
 /* Check circle */
-.move-handle{position:relative;display:grid;place-items:center;flex:0 0 44px;width:44px;height:48px;padding:0;border:0;background:none;border-radius:50%;touch-action:none;cursor:pointer;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.move-handle{position:relative;display:grid;place-items:center;flex:0 0 44px;width:44px;height:48px;padding:0;border:0;background:none;border-radius:50%;touch-action:pan-y pinch-zoom;cursor:pointer;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
 .dot{position:relative;display:block;width:24px;height:24px;border-radius:50%;border:1.6px solid #b4b4b9;background:var(--card);transition:background .15s,border-color .15s,transform .15s}
 .move-handle:active .dot{transform:scale(.9)}
 .move-handle[data-status=packed] .dot{background:var(--yellow);border-color:var(--yellow)}
@@ -540,3 +540,10 @@ textarea{resize:vertical;min-height:96px}
 @media print{#bags,#refill,.storage-kits,.home-help,.trip-view-switch{display:none!important}}
 
 @media print{.section{display:none!important}#inventory{display:block!important}}
+
+
+/* Trip packing uses the same circles and selection language as My gear. */
+#plannerPackingHead>.list-heading{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.trip-pack-tools{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:-8px 0 4px}.trip-pack-tools .text-btn{font-size:14px}.trip-pack-tools .hint{margin:0}
+.trip-bulk-bar{position:sticky;top:52px;z-index:4;padding:8px 12px 12px;margin:8px -4px;background:var(--card);border:1px solid var(--sep);border-radius:var(--radius);box-shadow:0 4px 12px #00000008}.trip-bulk-bar>div{display:flex;align-items:center;justify-content:space-between;gap:8px}.trip-bulk-bar>div+div{justify-content:flex-start;flex-wrap:wrap}.trip-bulk-bar [role=status]{font-size:14px;color:var(--sec)}.trip-bulk-bar .btn{flex:1;white-space:normal;min-height:44px}
+.trip-selecting .planner-sheet .trip-item-actions,.trip-selecting .planner-sheet .entity-grip,.trip-selecting .planner-sheet .trip-item-main details{display:none}.trip-selecting .planner-sheet .select-dot .dot{border-radius:7px}.trip-selecting .planner-sheet .trip-item{cursor:pointer}.journey-next{margin:16px 0 0}.journey-next .journey-link-row{border:1px solid var(--sep);margin:0}.journey-next [data-trip-next]{scroll-margin-top:72px}.packing-done{display:flex;align-items:center;gap:12px;background:var(--yellow-soft);padding:16px;border-radius:var(--radius)}.packing-done svg{width:28px;flex:none;color:var(--tint)}.packing-done b{font-size:16px;font-weight:500}.packing-done small{display:block;color:var(--sec);font-size:13px;margin-top:4px}#plannerMissingSection{scroll-margin-top:64px}

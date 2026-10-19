@@ -1,6 +1,6 @@
 # FieldKit requirements and decisions
 
-Updated 2026-10-18 (America/Denver). Current implementation: v1.25.1. Trip planner contract and full Gemini prompt/schema: PLANNER_SPEC.md.
+Updated 2026-10-18 (America/Denver). Current implementation: v1.26.0. Trip planner contract and full Gemini prompt/schema: PLANNER_SPEC.md.
 
 Each decision is marked **User** (Shahrouz decided or stated it) or **Proposal** (an assistant suggestion that is not approved until the user confirms it).
 
@@ -14,7 +14,7 @@ Each decision is marked **User** (Shahrouz decided or stated it) or **Proposal**
 - Another minus at 0 archives; restore is reversible; permanent deletion only in Archive, with confirmation.
 - Support pointer drag and an accessible touch/keyboard move menu for Packed, To pack and Empty. Retain last positive quantity for refill.
 - Dedicated go-bag gear stays dedicated; shared gear belongs in Shared station.
-- App opens directly to Inventory.
+- App opens to Trips (v1.25.0 product direction); My gear keeps the existing inventory workflow.
 - Test save/reload, packing, backup/restore and mobile at 393 × 852 CSS pixels (iPhone 14 Pro).
 - Preserve stable snapshot branches and leave unrelated repository pages untouched.
 - Use the personal GitHub account shahruuz. Keep the Her Mind & Wellness account and project separate.
@@ -83,3 +83,7 @@ User approved replacing feature-led inventory management with a complete Plan �
 ## Direct suggestion add — v1.25.1
 
 User: ＋ on suggestions should go directly to my list, and a checkmark means packed. The explicit ＋ action adds the displayed quantity as owned gear/stock when necessary and puts it on the trip list unpacked. No additional acquisition form. Preserve existing owned stock, metadata and packed units; only checklist packing controls mark packing.
+
+## v1.26.0 — packing usefulness and usability
+
+User: explain the benefit over Notes or AI in one sentence, improve the product, and test the overall experience. Implemented: accurate progress including missing suggestions; next physical action with home storage; trip-specific Select / Select all, Pack selected / Unpack selected with stock caps and Undo; To pack only filter; duplicate owned-item selector repair; recovered swipe repair from the unpublished v1.25.2 work. No data migration, new service, cost, or hosting change.
