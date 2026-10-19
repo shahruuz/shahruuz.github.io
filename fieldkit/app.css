@@ -1,4 +1,4 @@
-/* FieldKit v1.27.0 — iPhone Notes-style app theme. Single application stylesheet. */
+/* FieldKit v1.27.1 — iPhone Notes-style app theme. Single application stylesheet. */
 :root{
   color-scheme:light;
   font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",system-ui,sans-serif;
@@ -550,7 +550,7 @@ textarea{resize:vertical;min-height:96px}
 
 #plannerActiveActions>.inline{flex:1 1 100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}#plannerActiveActions .btn{padding:0 12px}#plannerFinish{flex-basis:100%}
 
-/* v1.27.0: one departure, one checklist. Ownership tools stay under More. */
+/* v1.27.1: one departure, one checklist. Ownership tools stay under More. */
 .tabs{grid-template-columns:repeat(2,minmax(0,1fr))}.tabs>.tab.hidden{display:none!important}
 #floatAdd{display:none!important}#bags>.titleline{margin-bottom:18px}#bags .subtitle{font-size:14px}
 .departure-start h3,.departure-setup h3{font-size:25px;letter-spacing:-.025em}.departure-start>p{color:var(--sec);font-size:15px;margin-top:6px}
@@ -565,3 +565,5 @@ textarea{resize:vertical;min-height:96px}
 #departureEditor form>label:not(.departure-checkbox){display:block;margin:16px 0 7px;font-size:14px;font-weight:600}#departureEditor form>.btn{margin-top:22px}.departure-checkbox{display:flex;align-items:center;gap:12px;min-height:48px;font-size:16px;margin:8px 0}.departure-checkbox input{width:22px;height:22px;min-height:22px;min-width:22px;appearance:auto;accent-color:var(--yellow);margin:0}.departure-remove{margin-top:12px;width:100%;color:var(--red)}
 @media(min-width:700px){.departure-trip{padding:24px;background:#ffffff44;border-radius:20px;border:1px solid #e1e1e6}.departure-start{padding-top:12px}.departure-setup{max-width:480px;margin:0 auto}.departure-row{min-height:62px}}
 @media(prefers-reduced-motion:reduce){.departure-meter i{transition:none}}
+
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}.departure-suggestions>.hint{margin:0 4px 12px}

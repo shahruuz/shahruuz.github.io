@@ -1,3 +1,9 @@
+# v1.27.1 verification — 2026-10-18
+
+- 180 automated checks pass, including optional unaccepted recommendations staying outside required packing totals and blockers.
+- Adds accessible screen-reader-only labels and updates the 393 × 852 browser QA wrapper.
+- Published browser QA pending deployment. Physical iPhone/Safari remains unverified.
+
 # v1.27.0 verification — 2026-10-18
 
 - 179 automated checks pass. Existing inventory-engine tests run without the new default UI override, then 14 new tests initialize the actual departure flow.

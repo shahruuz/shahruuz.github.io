@@ -1,5 +1,11 @@
 # FieldKit changelog
 
+## v1.27.1 — 2026-10-18
+
+- Keeps old unaccepted recommendations in collapsed Suggested additions. They do not count as required packing or block completion. ＋ adds directly to the checklist, unpacked, without inventing owned stock.
+- Adds screen-reader-only labels and clarifies inventory-only print, CSV, summary and refill controls.
+- 180 automated checks pass, including a new optional-suggestion readiness check.
+
 ## v1.27.0 — 2026-10-18
 
 - Replaces the four-destination inventory workflow with Pack / More and an active checklist directly on the main screen.

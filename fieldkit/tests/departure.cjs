@@ -51,11 +51,12 @@ test('Legacy suggestion plus moves directly onto checklist unpacked and does not
  assert.equal(run('departureCurrent().checklist[0].name'),'Sun hat');assert.equal(run('departureCurrent().checklist[0].packed'),0);assert.equal(run('items.length'),0);
  run('undoAction()');assert.equal(run('departureCurrent().missing.length'),1);assert.equal(run('departureCurrent().checklist.length'),0);
 });
+test('Unaccepted suggestions stay optional and do not inflate departure readiness',()=>{assert.equal(run('departureStats(departureCurrent()).total'),0);assert.equal(run('departureStats(departureCurrent()).blocked.length'),0);assert(elements.get('homeNext').innerHTML.includes('Suggested additions'));});
 test('Mixed old and new trips retain stock conflicts and accurate combined readiness',()=>{
  run(`{items=[{id:'departure_lamp',name:'Headlamp',qty:1,status:'stock',place:'shared',note:'Keep note',photo:'data:image/jpeg;base64,YWJj'}];
  const p=departureCurrent();p.items=[{inventoryId:'departure_lamp',quantity:1,packed:0,departureDay:false}];
  const other=planNormalize({name:'Other trip',items:[{inventoryId:'departure_lamp',quantity:1}],missing:[]},p.spec);other.items[0].packed=1;tripPlans.push(other);persist();departureRenderHome();}`);
- assert.equal(run('departureStats(departureCurrent()).total'),3);assert.equal(run('departureStats(departureCurrent()).blocked.length'),2);
+ assert.equal(run('departureStats(departureCurrent()).total'),1);assert.equal(run('departureStats(departureCurrent()).blocked.length'),1);
  assert.equal(run('departureToggle("owned:departure_lamp")'),false);assert.equal(run('departureCurrent().items[0].packed'),0);
  assert(elements.get('departureEditor').innerHTML.includes('0 available'));run('departureCloseEdit()');
  assert(!elements.get('homeNext').innerHTML.includes('Everything on your list is packed'));

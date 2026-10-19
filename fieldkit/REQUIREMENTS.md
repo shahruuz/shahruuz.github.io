@@ -1,6 +1,6 @@
 # FieldKit requirements and decisions
 
-Updated 2026-10-18 (America/Denver). Current implementation: v1.27.0. Trip planner contract and full Gemini prompt/schema: PLANNER_SPEC.md.
+Updated 2026-10-18 (America/Denver). Current implementation: v1.27.1. Trip planner contract and full Gemini prompt/schema: PLANNER_SPEC.md.
 
 Each decision is marked **User** (Shahrouz decided or stated it) or **Proposal** (an assistant suggestion that is not approved until the user confirms it).
 
@@ -93,3 +93,5 @@ Published browser QA refinement v1.26.1: preserve row keyboard focus and separat
 ## v1.27.0 — less setup, faster departures
 
 User: strip unnecessary inventory listing, prioritize getting ready to leave, evaluate templates instead of AI, fewer stronger features. The default screen is the active packing checklist; navigation is Pack / More. Hotel/weekend, day hike, camping and blank lists create standalone checklist rows without claiming ownership. Repeat preserves edits and resets packing. Need to get blocks a packing check; Before leaving groups late tasks. Existing inventory, quantities, photos, names, archive and reset marker are preserved behind More. Existing stock-linked trip items retain reservations. No new service, AI calls or costs. Legacy advanced inventory and AI functions remain available separately and do not gate the simple workflow. This direction supersedes the inventory-first setup and five-stage default journey.
+
+Default v1.27.1: unaccepted old recommendations are optional collapsed additions. They never inflate the required packing total. Chosen items alone determine progress.
