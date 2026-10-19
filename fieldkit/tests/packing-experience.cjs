@@ -89,5 +89,12 @@ test('Add owned gear uses a unique selector and saves the chosen item to this tr
  assert.equal(run('planCurrent().items.some(r=>r.inventoryId==="xp_map"&&r.quantity===1&&r.packed===0)'),true);
  assert.equal(run('items.find(i=>i.id==="xp_map").qty'),1);
 });
+test('Selection retains keyboard focus on the new row control after rendering',()=>{
+ run('journeySetSelecting(true)');const host=elements.get('plannerPacks'),original=host.querySelectorAll,choice=element('freshSelection');choice.dataset.tripSelect='xp_lamp';let focused=0;choice.focus=()=>focused++;host.querySelectorAll=()=>[choice];
+ assert.equal(run('journeyToggleSelected("xp_lamp")'),true);assert.equal(focused,1);assert.equal(run('journeySelected.has("xp_lamp")'),true);host.querySelectorAll=original;
+});
+test('Packing focus falls back from a completed plus control to the item circle',()=>{
+ const host=elements.get('plannerPacks'),original=host.querySelectorAll,plus=element('freshPlus'),circle=element('freshCircle');plus.dataset.planPlus='xp_lamp';plus.disabled=true;circle.dataset.planCheck='xp_lamp';let focused=0;circle.focus=()=>focused++;host.querySelectorAll=()=>[plus,circle];run('journeyFocusControl("xp_lamp","planPlus")');assert.equal(focused,1);host.querySelectorAll=original;
+});
 run('journeyResetPacking()');context.window.restoreExperience=savedExperience;
 run('entityApply(window.restoreExperience.snapshot);plannerTripId=window.restoreExperience.trip;tripDraft=window.restoreExperience.draft;current=window.restoreExperience.current;openZone=window.restoreExperience.openZone;persist();entityRefresh()');

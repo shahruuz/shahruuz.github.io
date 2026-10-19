@@ -1,5 +1,13 @@
 # FieldKit changelog
 
+## v1.26.1 — 2026-10-18
+
+- Published phone-width QA found cramped Add gear / Scan photo controls; gives them equal full-width columns and separates Back from trip.
+- Retains keyboard focus on a selected row after redraw; packing keeps focus on the same usable control or the next available circle. Completing a batch returns focus to Select.
+- Corrects singular item counts. 165 automated checks pass, including new focus coverage.
+- v1.26.0 was deployed and verified on desktop and at 393 × 852: saved-trip retention, accurate progress, Add owned gear, row selection, Select all, batch packing, exact Undo, and swipe reveal/close. No physical iPhone/Safari verification is claimed.
+- Rollback: fieldkit-before-v1.26.1 at f73a52cecfc8cac62dd08175a5391aca4c4a3521.
+
 ## v1.26.0 — 2026-10-18
 
 - Trip progress includes missing supplies, avoiding 0/0 or completed rings while supplies are missing. Up next names the next item, its home location and quantity left; tap to jump to it.

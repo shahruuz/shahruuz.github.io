@@ -1,3 +1,10 @@
+# v1.26.1 verification — 2026-10-18
+
+- 165 automated checks pass, including selection focus after redraw and safe focus fallback from a disabled packed-quantity control.
+- v1.26.0 published desktop and 393 × 852 CSS-pixel browser checks passed: returning trip/data, progress including missing units, Add owned gear, row selection, Select all, bulk pack, Undo, swipe reveal and inward close. The visual review prompted the action-button spacing and focus refinements in this patch.
+- Physical iPhone/Safari, live camera, real Google API, installed PWA and real offline testing remain unverified.
+- Rollback: fieldkit-before-v1.26.1 at f73a52cecfc8cac62dd08175a5391aca4c4a3521.
+
 # v1.26.0 verification — 2026-10-18
 
 - 163 automated checks pass: existing inventory, swipe/cancellation, planner, backups, consent and recovery coverage, plus trip progress including missing units, location-based next action, selection click-through, filtered Select all, reserved-stock caps, bulk pack/unpack Undo, failed-save rollback, finished-trip protection and dynamic Add owned gear selector.

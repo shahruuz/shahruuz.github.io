@@ -77,14 +77,14 @@ function initJourney(){
 function journeyResetPacking(){journeySelecting=false;journeyRemainingOnly=false;journeySelected.clear();document.body.classList.remove('trip-selecting')}
 function journeyVisibleItems(p){return p.items.filter(r=>!journeyRemainingOnly||r.packed<r.quantity)}
 function journeySetSelecting(on){resetEntityGesture();journeySelecting=!!on;journeySelected.clear();document.body.classList.toggle('trip-selecting',journeySelecting);plannerRender()}
-function journeyToggleSelected(id){const p=planCurrent();if(!journeySelecting||!p||p.state==='ended'||!journeyVisibleItems(p).some(r=>r.inventoryId===id))return false;if(journeySelected.has(id))journeySelected.delete(id);else journeySelected.add(id);plannerRender();return true}
+function journeyToggleSelected(id){const p=planCurrent();if(!journeySelecting||!p||p.state==='ended'||!journeyVisibleItems(p).some(r=>r.inventoryId===id))return false;if(journeySelected.has(id))journeySelected.delete(id);else journeySelected.add(id);plannerRender();journeyFocusControl(id,'tripSelect');return true}
 function journeySelectAll(){const p=planCurrent();if(!journeySelecting||!p||p.state==='ended')return;const rows=journeyVisibleItems(p),all=rows.length&&rows.every(r=>journeySelected.has(r.inventoryId));for(const r of rows)if(all)journeySelected.delete(r.inventoryId);else journeySelected.add(r.inventoryId);plannerRender()}
 function journeyBulkPack(pack){
  const p=planCurrent();if(!journeySelecting||!p||p.state==='ended')return false;
  const changes=journeyVisibleItems(p).filter(r=>journeySelected.has(r.inventoryId)).map(r=>({row:r,packed:pack?Math.max(r.packed,Math.min(r.quantity,journeyAvailable(p,r.inventoryId))):0})).filter(c=>c.row.packed!==c.packed);
  if(!changes.length){toast(pack?'No available gear to pack in this selection':'Selected items are already unpacked');return false}
  const ok=entityCommit(()=>{for(const c of changes)c.row.packed=c.packed},changes.length+' items '+(pack?'packed':'unpacked'));
- if(ok){journeySelecting=false;journeySelected.clear();document.body.classList.remove('trip-selecting');plannerRender()}
+ if(ok){journeySelecting=false;journeySelected.clear();document.body.classList.remove('trip-selecting');plannerRender();$('tripSelectToggle').focus({preventScroll:true})}
  return ok;
 }
 function journeyJump(id){
@@ -96,7 +96,7 @@ function journeyRenderTools(p){
  const ended=p.state==='ended',rows=journeyVisibleItems(p),n=journeyStats(p);
  for(const id of [...journeySelected])if(!rows.some(r=>r.inventoryId===id))journeySelected.delete(id);
  $('tripSelectToggle').textContent=journeySelecting?'Done':'Select';$('tripSelectToggle').setAttribute('aria-pressed',String(journeySelecting));$('tripSelectToggle').disabled=ended||!p.items.length;
- $('tripRemainingToggle').textContent=journeyRemainingOnly?'Show all items':'To pack only';$('tripRemainingToggle').setAttribute('aria-pressed',String(journeyRemainingOnly));$('tripVisibleCount').textContent=rows.length+' items';
+ $('tripRemainingToggle').textContent=journeyRemainingOnly?'Show all items':'To pack only';$('tripRemainingToggle').setAttribute('aria-pressed',String(journeyRemainingOnly));$('tripVisibleCount').textContent=rows.length+' item'+(rows.length===1?'':'s');
  $('tripBulkBar').classList.toggle('hidden',!journeySelecting||ended);$('tripSelectionCount').textContent=journeySelected.size+' selected';$('tripSelectAll').textContent=rows.length&&rows.every(r=>journeySelected.has(r.inventoryId))?'Deselect all':'Select all';$('tripSelectAll').disabled=!rows.length;
  $('tripPackSelected').disabled=!rows.some(r=>journeySelected.has(r.inventoryId)&&r.packed<Math.min(r.quantity,journeyAvailable(p,r.inventoryId)));$('tripUnpackSelected').disabled=!rows.some(r=>journeySelected.has(r.inventoryId)&&r.packed>0);
  $('journeyNext').classList.toggle('hidden',ended||journeySelecting);
@@ -112,4 +112,11 @@ function initJourneyPacking(){
  $('tripRemainingToggle').onclick=()=>{journeyRemainingOnly=!journeyRemainingOnly;journeySelected.clear();plannerRender()};
  $('tripSelectAll').onclick=journeySelectAll;$('tripPackSelected').onclick=()=>journeyBulkPack(true);$('tripUnpackSelected').onclick=()=>journeyBulkPack(false);
  $('journeyNext').onclick=e=>{const b=e.target.closest('[data-trip-next]');if(b)journeyJump(b.dataset.tripNext)};
+}
+
+function journeyFocusControl(id,key='planCheck'){
+ const controls=[...$('plannerPacks').querySelectorAll('button')];
+ const available=b=>!b.disabled&&b.getClientRects().length>0;
+ const target=controls.find(b=>b.dataset[key]===id&&available(b))||controls.find(b=>b.dataset.planCheck===id&&available(b))||controls.find(b=>(b.dataset.tripSelect||b.dataset.planCheck)&&available(b));
+ (target||$('tripSelectToggle')).focus({preventScroll:true});
 }
