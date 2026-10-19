@@ -1,3 +1,9 @@
+# v1.27.3 verification — 2026-10-18
+
+- 181 automated checks pass. Focus regression now models a closed Packed control that still reports a layout rectangle, ensuring the next unfinished item receives focus.
+- Published v1.27.2 phone-width checks verified retained list, packing progress, collapsed Packed and no horizontal overflow at 393 × 852. v1.27.3 keyboard-focus check follows publication.
+- Physical iPhone/Safari, camera, real Google API, PWA installation and offline remain unverified.
+
 # v1.27.2 verification — 2026-10-18
 
 - 181 automated checks pass, including no text-input focus after packing or closing an item editor.

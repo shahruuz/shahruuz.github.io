@@ -94,6 +94,6 @@ test('Packing and closing item editor never focus a text field or summon a mobil
  const home=elements.get('homeNext'),query=home.querySelectorAll,button=element('visiblePack');button.dataset.departurePack='check_focus';let focused=0,textFocused=0;button.focus=()=>focused++;
  const addFocus=elements.get('departureAddName').focus;elements.get('departureAddName').focus=()=>textFocused++;
  assert(run('departureCreate("blank","Focus test",1,1)'));assert(run('departureAdd("Keys")'));
- home.querySelectorAll=()=>[button];run('departureToggle(departureCurrent().checklist[0].id)');assert.equal(textFocused,0);assert.equal(focused,1);
+ assert(run('departureAdd("Wallet")'));button.dataset.departurePack=run('departureCurrent().checklist[1].id');const hidden=element('closedPackedControl');hidden.dataset.departurePack=run('departureCurrent().checklist[0].id');hidden.focus=()=>{throw Error('Focused a control inside closed Packed')};home.querySelectorAll=()=>[hidden,button];run('departureToggle(departureCurrent().checklist[0].id)');assert.equal(textFocused,0);assert.equal(focused,1);
  run('departureCloseEdit()');assert.equal(textFocused,0);home.querySelectorAll=query;elements.get('departureAddName').focus=addFocus;
 });

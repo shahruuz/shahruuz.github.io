@@ -1,5 +1,11 @@
 # FieldKit changelog
 
+## v1.27.3 — 2026-10-18
+
+- Keyboard packing skips controls inside the collapsed Packed section and moves to the next unfinished item. Closing an editor avoids hidden controls and text fields.
+- 181 automated checks pass; strengthens focus coverage for closed details elements whose browser layout rectangles are still present.
+- v1.27.2 published 393 × 852 checks passed for packing, correct progress, collapsed Packed, preserved lists and no horizontal overflow. Physical iPhone remains unverified.
+
 ## v1.27.2 — 2026-10-18
 
 - Packing and closing item details return focus to a button, preventing the add-item keyboard from interrupting mobile packing.

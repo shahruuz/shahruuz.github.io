@@ -1,6 +1,6 @@
 # FieldKit requirements and decisions
 
-Updated 2026-10-18 (America/Denver). Current implementation: v1.27.2. Trip planner contract and full Gemini prompt/schema: PLANNER_SPEC.md.
+Updated 2026-10-18 (America/Denver). Current implementation: v1.27.3. Trip planner contract and full Gemini prompt/schema: PLANNER_SPEC.md.
 
 Each decision is marked **User** (Shahrouz decided or stated it) or **Proposal** (an assistant suggestion that is not approved until the user confirms it).
 
