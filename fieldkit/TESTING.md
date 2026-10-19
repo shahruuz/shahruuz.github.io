@@ -1,3 +1,15 @@
+# Final published QA — v1.26.1 — 2026-10-18
+
+- Production commit 1596c138846c83ca6a3e6036ef24473168bcd1e8; GitHub Pages run 39189803466 completed successfully. Published source tree matches the tested local tree 5c8cc3d7709d536d39871d3730c9978726ec88a2.
+- 165 automated regression checks pass. Browser QA used a separate cloud browser with only disposable sample inventory; the owner's physical phone records were not inspected or altered.
+- Regular /fieldkit/ URL shows v1.26.1; prior sample inventory and trip survived updates/reloads. New trip reused saved gear without recreating ownership. Progress includes missing suggestions.
+- At 393 × 852 CSS pixels: native row and Select all clicks, filtered Select all, bulk pack/unpack, active Undo, swipe reveal and inward close, next-action navigation and two equal action columns were checked. Body width and scrollWidth were both 393 (no horizontal overflow); the desktop iframe's internal scrollbar narrows the sheet to 378 pixels.
+- Keyboard Space selects a row and retains focus on its replacement checkbox. Batch packing returns focus to Select. The final action buttons measured 169/167 pixels wide and at least 44 pixels high, with a separate full-width finish action.
+- End-to-end sample flow: suggestion adds unpacked; packed consumables enter completion review; consuming two units created a return list and a two-unit refill; returning eight units and explicitly refilling two resolved the follow-up tasks. Add owned gear also saved the chosen headlamp.
+- Browser-level pointer drags verified swipes; this is not a physical iPhone/Safari touch test. Real camera, real Google API, installed PWA and real offline behavior remain unverified. Supervised local preview failed to mount proc, so visuals were checked against the published site.
+- Undo was checked while its visible 7.2-second action window was active, after the toast finished animating. No user secrets or personal inventory are included in the QA record.
+- Rollback before the entire feature release: fieldkit-before-v1.26.0; before the final polish: fieldkit-before-v1.26.1.
+
 # v1.26.1 verification — 2026-10-18
 
 - 165 automated checks pass, including selection focus after redraw and safe focus fallback from a disabled packed-quantity control.
