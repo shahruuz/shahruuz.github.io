@@ -1,3 +1,9 @@
+# v1.27.2 verification — 2026-10-18
+
+- 181 automated checks pass, including no text-input focus after packing or closing an item editor.
+- Published v1.27.0/1 desktop UI checks passed: template creation without inventory, correct quantities for 3 days / 3 people, check/collapse, editing Need to get and location, direct quick add, repeat/reset and reload.
+- Final 393 × 852 CSS-pixel browser checks follow deployment. Physical iPhone/Safari, live camera/Google API, installed PWA and real offline remain unverified.
+
 # v1.27.1 verification — 2026-10-18
 
 - 180 automated checks pass, including optional unaccepted recommendations staying outside required packing totals and blockers.

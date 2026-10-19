@@ -89,3 +89,11 @@ test('Restoring a full backup keeps checklist data and the existing gear notes/p
  assert.equal(run('items[0].note'),'Keep note');assert.equal(run('items[0].photo'),'data:image/jpeg;base64,YWJj');
  assert.equal(storage.get('fieldkit_empty_start_2026_v1'),'1');
 });
+
+test('Packing and closing item editor never focus a text field or summon a mobile keyboard',()=>{
+ const home=elements.get('homeNext'),query=home.querySelectorAll,button=element('visiblePack');button.dataset.departurePack='check_focus';let focused=0,textFocused=0;button.focus=()=>focused++;
+ const addFocus=elements.get('departureAddName').focus;elements.get('departureAddName').focus=()=>textFocused++;
+ assert(run('departureCreate("blank","Focus test",1,1)'));assert(run('departureAdd("Keys")'));
+ home.querySelectorAll=()=>[button];run('departureToggle(departureCurrent().checklist[0].id)');assert.equal(textFocused,0);assert.equal(focused,1);
+ run('departureCloseEdit()');assert.equal(textFocused,0);home.querySelectorAll=query;elements.get('departureAddName').focus=addFocus;
+});

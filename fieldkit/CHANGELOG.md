@@ -1,5 +1,10 @@
 # FieldKit changelog
 
+## v1.27.2 — 2026-10-18
+
+- Packing and closing item details return focus to a button, preventing the add-item keyboard from interrupting mobile packing.
+- 181 automated checks pass. Live desktop checks verified template creation without inventory, check/collapse, Need to get, quick add, repeat/reset and reload. Final mobile-width QA follows deployment.
+
 ## v1.27.1 — 2026-10-18
 
 - Keeps old unaccepted recommendations in collapsed Suggested additions. They do not count as required packing or block completion. ＋ adds directly to the checklist, unpacked, without inventing owned stock.

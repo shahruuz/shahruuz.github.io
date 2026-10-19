@@ -44,7 +44,7 @@ function departureRow(r,ended){
  '<button type="button" class="departure-item" data-departure-edit="'+esc(r.key)+'" '+(ended?'disabled':'')+'><b>'+esc(r.name)+'</b>'+((r.place||blocked||r.packed&&!full)?'<small>'+(blocked?(r.owned?'Check availability':'Need to get'):(r.packed&&!full?r.packed+' of '+r.quantity+' packed':esc(r.place)))+'</small>':'')+'</button>'+(r.quantity>1?'<span class="departure-quantity" aria-label="'+r.packed+' of '+r.quantity+' packed">'+(r.packed&&!full?r.packed+'/':'×')+r.quantity+'</span>':'')+'</div>';
 }
 function departureRenderHome(){
- const p=departureCurrent(),host=$('homeNext');$('departureOtherTrips').classList.toggle('hidden',!tripPlans.some(p=>!p.hidden));
+ const p=departureCurrent(),host=$('homeNext');$('bags').classList.toggle('departure-active',!!p);$('departureOtherTrips').classList.toggle('hidden',!tripPlans.some(p=>!p.hidden));
  $('planOpen').classList.toggle('hidden',!p);$('homeAdd').setAttribute('aria-label','New trip');
  if(!p){host.innerHTML=departureRenderPicker();return}
  const s=departureStats(p),ended=p.state==='ended',ready=s.total>0&&!s.remaining.length;
@@ -58,7 +58,7 @@ function departureToggle(key){
  if(r.suggestion)return departureAcquire(key);
  if(r.need&&r.packed<r.quantity){departureOpenEdit(key);return false}
  let ok;if(r.owned){plannerTripId=p.id;ok=planSetPacked(key.slice(6),r.packed===r.quantity?0:r.quantity)}else ok=departureMutate(p=>{const row=p.checklist.find(x=>x.id===key);row.packed=row.packed===row.quantity?0:row.quantity},r.packed===r.quantity?'Unpacked '+r.name:'Packed '+r.name);
- if(ok){departureRenderHome();const button=[...$('homeNext').querySelectorAll('[data-departure-pack]')].find(b=>b.dataset.departurePack===key);const visible=button&&button.getClientRects().length>0;(visible?button:$('departureAddName'))?.focus({preventScroll:true})}return ok;
+ if(ok){departureRenderHome();const button=[...$('homeNext').querySelectorAll('[data-departure-pack]')].find(b=>b.dataset.departurePack===key);const visible=button&&button.getClientRects().length>0;(visible?button:[...$('homeNext').querySelectorAll('[data-departure-pack]')].find(b=>b.getClientRects().length>0)||$('homeAdd')).focus({preventScroll:true})}return ok;
 }
 function departureAdd(name){name=String(name||'').trim();if(!name||name.length>200)return false;const p=departureCurrent();if(!p||p.state==='ended'||(p.checklist||[]).length>=1000)return false;return departureMutate(p=>{(p.checklist??=[]).push({id:'check_'+entityId(),name,quantity:1,packed:0,day:false,need:false,place:'',note:''})},'Added to your list · not packed')}
 function departureAcquire(key){
@@ -82,7 +82,7 @@ function departureSaveEdit(values){
  if(r.owned&&(quantity>planInt(items.find(i=>i.id===key.slice(6))?.qty)||packed>journeyAvailable(p,key.slice(6))))return false;
  const ok=departureMutate(p=>{if(r.owned){Object.assign(p.items.find(x=>x.inventoryId===key.slice(6)),{quantity,packed,departureDay:day,locked:true})}else {const row={id:r.suggestion?'check_'+entityId():key,name:name.trim(),quantity,packed,need:!!need,day:!!day,place:place.slice(0,120),note:r.note||''};if(r.suggestion){p.missing.splice(Number(key.slice(8)),1);(p.checklist??=[]).push(row)}else Object.assign(p.checklist.find(x=>x.id===key),row)}},'Item updated');if(ok)departureCloseEdit();return ok;
 }
-function departureCloseEdit(){departureEdit=null;$('departureLayer').classList.add('hidden');uiSyncLayers();$('departureAddName')?.focus({preventScroll:true})}
+function departureCloseEdit(){const key=departureEdit;departureEdit=null;$('departureLayer').classList.add('hidden');uiSyncLayers();const row=[...$('homeNext').querySelectorAll('[data-departure-edit]')].find(b=>b.dataset.departureEdit===key&&b.getClientRects().length>0);(row||$('homeAdd')).focus({preventScroll:true})}
 function departureFinish(){const p=departureCurrent();if(!p||p.state==='ended')return false;if(p.items.length){departureAdvancedOpen(p.id);planEndReview();return true}return departureMutate(p=>{p.state='ended';p.endedAt=new Date().toISOString()},'Trip saved for next time')}
 
 function initDeparture(){
